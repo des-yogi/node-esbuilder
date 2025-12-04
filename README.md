@@ -1,2 +1,2 @@
-# node-esbuilder
+# node esbuilder
 New frontend project builder
