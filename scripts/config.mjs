@@ -6,11 +6,11 @@ import { fileURLToPath } from 'node:url';
  * Этот модуль отвечает за:
  * - чтение projectConfig.json;
  * - подготовку списков файлов (css/js/img/video/blocksDirs),
- *   аналогично функции getFilesList из gulpfile.js проекта ugspot.
+ *   аналогично функции getFilesList из gulpfile.js проекта ugspot,
+ *   но уже под новую архитектуру (Dart Sass v3, @use).
  *
- * На данном этапе здесь только:
- * - чтение projectConfig.json;
- * - заглушка getFilesList() с описанием ожидаемого результата.
+ * На первом этапе реализуем только CSS-часть: список SCSS-файлов,
+ * которые должны подключаться в style.scss.
  */
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,44 +19,72 @@ const rootDir = path.resolve(__dirname, '..');
 
 const projectConfigPath = path.join(rootDir, 'projectConfig.json');
 
-/**
- * Чтение projectConfig.json из корня проекта.
- */
 export async function readProjectConfig() {
   const json = await readFile(projectConfigPath, 'utf8');
   return JSON.parse(json);
 }
 
 /**
- * Заглушка для функции, аналогичной getFilesList из ugspot/gulpfile.js.
+ * Возвращает объект со списками файлов.
  *
- * В будущем должна возвращать объект вида:
+ * Формат (пока основное — css):
  * {
- *   css: string[];        // SCSS/CSS файлы для подключения в style.scss
- *   js: string[];         // JS файлы блоков + addJsBefore/addJsAfter
- *   img: string[];        // дополнительные изображения (addImages)
- *   video: string[];      // дополнительные видео (addVideo)
- *   blocksDirs: string[]; // директории подключённых блоков
+ *   css: {
+ *     before: string[]; // пути файлов из addCssBefore
+ *     blocks: string[]; // scss-файлы блоков src/blocks/<block>/<block>.scss
+ *     after: string[];  // пути файлов из addCssAfter
+ *     all: string[];    // before + blocks + after
+ *   },
+ *   js: { ... },        // заглушка под будущее
+ *   img: string[],
+ *   video: string[],
+ *   blocksDirs: string[],
+ *   projectConfig: object,
  * }
- *
- * Логика будет основана на:
- * - projectConfig.blocks;
- * - addCssBefore/addCssAfter;
- * - addJsBefore/addJsAfter;
- * - copiedCss/copiedJs;
- * - addImages/addVideo.
  */
 export async function getFilesList() {
   const projectConfig = await readProjectConfig();
 
-  // TODO: реализовать построение списков файлов аналогично getFilesList из ugspot.
-  // Пока возвращаем пустые списки, чтобы не ломать импорт.
+  const srcPath = projectConfig.dirs?.srcPath ?? 'src/';
+  const blocksDirName = projectConfig.dirs?.blocksDirName ?? 'blocks';
+
+  const normalizedSrc = srcPath.replace(/[/\\]+$/, ''); // "src"
+  const blocksRoot = `${normalizedSrc}/${blocksDirName}`; // "src/blocks"
+
+  const addCssBefore = Array.isArray(projectConfig.addCssBefore)
+    ? projectConfig.addCssBefore.map(String)
+    : [];
+
+  const addCssAfter = Array.isArray(projectConfig.addCssAfter)
+    ? projectConfig.addCssAfter.map(String)
+    : [];
+
+  const blocksConfig = projectConfig.blocks ?? {};
+  const blockNames = Object.keys(blocksConfig);
+
+  const blockScssFiles = blockNames.map(
+    (blockName) => `${blocksRoot}/${blockName}/${blockName}.scss`,
+  );
+
+  const cssAll = [...addCssBefore, ...blockScssFiles, ...addCssAfter];
+
   return {
-    css: [],
-    js: [],
-    img: [],
-    video: [],
-    blocksDirs: [],
+    css: {
+      before: addCssBefore,
+      blocks: blockScssFiles,
+      after: addCssAfter,
+      all: cssAll,
+    },
+    js: {
+      before: projectConfig.addJsBefore ?? [],
+      blocks: [],
+      after: projectConfig.addJsAfter ?? [],
+      copied: projectConfig.copiedJs ?? [],
+      all: [],
+    },
+    img: projectConfig.addImages ?? [],
+    video: projectConfig.addVideo ?? [],
+    blocksDirs: blockNames.map((name) => `${blocksRoot}/${name}`),
     projectConfig,
   };
 }
