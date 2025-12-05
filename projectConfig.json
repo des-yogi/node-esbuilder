@@ -5,7 +5,8 @@
     "blocksDirName": "blocks"
   },
   "blocks": {
-    "example-block": []
+    "example-block": [],
+    "test-block": []
   },
   "addCssBefore": [
     "src/scss/variables.scss"

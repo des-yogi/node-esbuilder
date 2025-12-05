@@ -20,6 +20,7 @@
     "cssnano": "^7.0.6",
     "esbuild": "^0.24.0",
     "eslint": "^9.28.0",
+    "mkdirp": "^3.0.1",
     "postcss": "^8.4.49",
     "postcss-extract-media-query": "^3.2.0",
     "postcss-inline-svg": "^6.0.0",

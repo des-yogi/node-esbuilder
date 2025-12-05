@@ -1,13 +1,21 @@
-'use strict';
 // Генератор файлов блока
 
 // Использование: node createBlock.js [имя блока] [доп. расширения через пробел]
 
-const fs = require('fs');
-const projectConfig = require('./projectConfig.json');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { mkdirp } from 'mkdirp';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Читаем projectConfig.json
+const projectConfig = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'projectConfig.json'), 'utf8')
+);
 
 const dirs = projectConfig.dirs;
-const { mkdirp } = require('mkdirp');
 
 const blockName = process.argv[2];          // получим имя блока
 const defaultExtensions = ['scss', 'html', 'img', 'bg-img']; // расширения по умолчанию
@@ -40,8 +48,8 @@ if (blockName) {
       }
       if (!hasThisBlock) {
         projectConfig.blocks[blockName] = [];
-        const newPackageJson = JSON.stringify(projectConfig, '', 2);
-        fs.writeFileSync('./projectConfig.json', newPackageJson);
+        const newProjectConfig = JSON.stringify(projectConfig, '', 2);
+        fs.writeFileSync(path.join(__dirname, 'projectConfig.json'), newProjectConfig);
         fileCreateMsg = '[NTH] Подключение блока добавлено в projectConfig.json';
       }
     }
@@ -118,10 +126,10 @@ function uniqueArray(arr) {
 }
 
 // Проверка существования файла
-function fileExist(path) {
-  const fs = require('fs');
+function fileExist(filePath) {
   try {
-    fs.statSync(path);
+    fs.statSync(filePath);
+    return true;
   } catch (err) {
     return !(err && err.code === 'ENOENT');
   }
