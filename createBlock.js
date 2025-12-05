@@ -131,6 +131,9 @@ function fileExist(filePath) {
     fs.statSync(filePath);
     return true;
   } catch (err) {
-    return !(err && err.code === 'ENOENT');
+    if (err && err.code === 'ENOENT') {
+      return false;
+    }
+    return true;
   }
 }

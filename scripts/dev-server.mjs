@@ -116,10 +116,10 @@ function setupWatchers() {
     try {
       // Регенерируем style.scss если изменился файл блока
       if (filePath.includes('/blocks/')) {
-        generateStyleFile();
+        await generateStyleFile();
       }
       await buildStyles({ mode });
-      bs.reload('*.css');
+      bs.reload();
     } catch (error) {
       console.error('[NTH] ✗ Ошибка при пересборке стилей:', error);
     }

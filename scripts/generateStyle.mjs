@@ -33,7 +33,7 @@
  * Все пути делаем относительными от src/scss/style.scss.
  */
 
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getFilesList, projectConfig } from './config.mjs';
@@ -45,7 +45,7 @@ const __dirname = path.dirname(__filename);
 /**
  * Генерирует файл style.scss с импортами всех стилей блоков
  */
-export function generateStyleFile() {
+export async function generateStyleFile() {
   const lists = getFilesList();
   const dirs = projectConfig.dirs;
 
@@ -70,7 +70,7 @@ export function generateStyleFile() {
 
   // Записываем файл
   const outputPath = path.join(__dirname, '..', dirs.srcPath, 'scss/style.scss');
-  fs.writeFileSync(outputPath, styleImports);
+  await fs.writeFile(outputPath, styleImports);
 
   console.log('[NTH] style.scss сгенерирован успешно.');
   console.log(`[NTH] Подключено файлов: ${lists.css.length}`);
@@ -78,5 +78,8 @@ export function generateStyleFile() {
 
 // Если скрипт запущен напрямую
 if (import.meta.url === `file://${process.argv[1]}`) {
-  generateStyleFile();
+  generateStyleFile().catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
 }

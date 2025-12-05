@@ -48,7 +48,7 @@ export async function build({ mode = 'development' } = {}) {
 
     // Шаг 2: Генерация style.scss
     console.log('\n' + '-'.repeat(60));
-    generateStyleFile();
+    await generateStyleFile();
 
     // Шаг 3: Сборка SVG-спрайта
     console.log('\n' + '-'.repeat(60));

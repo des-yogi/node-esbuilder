@@ -28,7 +28,7 @@ import autoprefixer from 'autoprefixer';
 import sortMediaQueries from 'postcss-sort-media-queries';
 import inlineSvg from 'postcss-inline-svg';
 import cssnano from 'cssnano';
-import customPostcssPlugins from '../customPostcss.js';
+import customPostcssPlugins from '../customPostcss.mjs';
 import { projectConfig } from './config.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
