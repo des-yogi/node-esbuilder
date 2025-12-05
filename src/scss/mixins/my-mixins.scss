@@ -1,0 +1,56 @@
+@use '../variables.scss' as *;
+@use "sass:list";
+
+@mixin text-hide {
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+@mixin list-decorated {
+  padding-left: 50px;
+  position: relative;
+  list-style-type: none;
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-2px);
+    left: 0;
+    content: "";
+    display: block;
+    width: 30px;
+    height: 2px;
+    background-color: $main-color;
+
+    @media (min-width: $screen-md) {
+      transform: translateY(-3px);
+    }
+  }
+}
+
+@mixin img-sharp {
+  image-rendering: pixelated;
+   image-rendering: -moz-crisp-edges; /* Firefox */
+   -ms-interpolation-mode: nearest-neighbor; /* IE */
+}
+
+// stylelint-disable property-blacklist
+@mixin transition($transition...) {
+  @if $enable-transitions {
+    @if list.length($transition) == 0 {
+      transition: $transition-base;
+    } @else {
+      transition: $transition;
+    }
+  }
+
+  @if $enable-prefers-reduced-motion-media-query {
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}

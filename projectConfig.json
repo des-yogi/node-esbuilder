@@ -1,0 +1,22 @@
+{
+  "dirs": {
+    "srcPath": "src/",
+    "buildPath": "build/",
+    "blocksDirName": "blocks"
+  },
+  "blocks": {
+    "example-block": []
+  },
+  "addCssBefore": [
+    "src/scss/variables.scss"
+  ],
+  "addCssAfter": [],
+  "addJsBefore": [],
+  "addJsAfter": [],
+  "copiedJs": [],
+  "copiedCss": [],
+  "addImages": [],
+  "singleCompiled": [],
+  "lintCss": true,
+  "lintJs": false
+}

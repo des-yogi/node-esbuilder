@@ -1,0 +1,84 @@
+@use '../../scss/variables.scss' as *;
+
+.lang-switcher {
+  // @include col(xs, 5, $grid-columns, 20px);
+  // @include col(md, 2);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+
+  @media (min-width: $screen-md) {
+    display: inline-flex;
+    max-width: 90px;
+    margin-left: 0;
+  }
+
+  $block-name: &; // #{$block-name}__element
+
+  .dropdown-toggle {
+    padding: 5px 10px;
+    font-family: $font-family;
+    font-size: $font-size;
+    font-weight: 500;
+    text-transform: uppercase;
+    user-select: none;
+    cursor: pointer;
+    color: inherit;
+    background-color: $white;
+    border: none;
+    box-shadow: $shadow;
+
+    &:hover,
+    &:focus {
+      color: $main-color;
+    }
+
+    &::after {
+      display: none;
+    }
+
+    &::before {
+      display: inline-block;
+      vertical-align: middle;
+      content: "";
+      width: 16px;
+      height: 10px;
+      margin-right: 10px;
+
+      // background: svg-load('../blocks/sprite-svg/svg/bottom-arrow-s.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+      background: svg-load('../blocks/lang-switcher/bg-img/bottom-arrow-s.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100%;
+      transition: transform $transition-time ease-out;
+    }
+
+    &[aria-expanded="true"] {
+      &::before {
+        transform: rotate(180deg) translateY(2px);
+      }
+    }
+  }
+
+  .dropdown-menu {
+    min-width: 65px;
+  }
+
+  .dropdown-item {
+    font-family: $font-family;
+    font-size: $font-size;
+    font-weight: 500;
+    padding-right: 5px;
+    color: inherit;
+
+    &:hover,
+    &:focus {
+      color: $main-color;
+    }
+  }
+
+  .dropdown-item + .dropdown-item {
+    padding-top: 10px;
+  }
+}

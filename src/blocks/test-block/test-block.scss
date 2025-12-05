@@ -1,0 +1,33 @@
+@use '../../scss/variables.scss' as *;
+
+.test-block {
+  background: lightcoral;
+
+  $block-name: &; // #{$block-name}__element
+
+  @media (width >= 768px) {
+    background: blue;
+  }
+
+  @media (width >= 1200px) {
+    background: darkgoldenrod;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 150px;
+    padding: 8px 16px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #f00;
+    cursor: pointer;
+    background-color: paleturquoise;
+    background-position: center left 10px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: svg-load('../blocks/sprite-svg/svg/left-arrow-s.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+  }
+}

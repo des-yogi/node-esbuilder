@@ -1,0 +1,151 @@
+@use '../../scss/variables.scss' as *;
+@use "sass:math";
+
+$gray-lightest: hsl(0deg 0% 90%) !default;
+$screen-xs: 0 !default;
+$screen-sm: 480px !default;
+$screen-md: 768px !default;
+$screen-lg: 992px !default;
+$screen-xl: 1200px !default;
+$screen-xxl: 1800px !default;
+$menu-desktop-width: $screen-xl !default;
+$toggler-part-height: 3px !default;
+$toggler-part-bg-color: #000 !default;
+$transition-time: 0.3s !default;
+
+.main-nav {
+  $block-name: &; // #{$block-name}__element
+
+  position: relative;
+  z-index: 10;
+
+  // первый уровень
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // мобильный вид списка
+    @media (max-width: #{$menu-desktop-width - 1px}) {
+      // открытие/закрытие меню только в случае работающего JS
+
+      .js & {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.2s;
+      }
+
+      .js #{$block-name}--open & {
+        max-height: 100vh;
+        transition: max-height 0.6s;
+      }
+    }
+
+    // настольный вид списка
+    @media (min-width: $menu-desktop-width) {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__item {
+    position: relative;
+
+    &--active {
+
+      & > #{$block-name}__link {
+        color: red;
+      }
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: 0.5em;
+    text-decoration: none;
+    background-color: #fff;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      background-color: aquamarine;
+    }
+
+    &--lvl-2 {
+      @media (max-width: #{$menu-desktop-width - 1px}) {
+        padding-left: 1.2em;
+      }
+    }
+
+    &--lvl-3 {
+      @media (max-width: #{$menu-desktop-width - 1px}) {
+        padding-left: 2.4em;
+      }
+    }
+  }
+
+  &__sublist-wrapper {
+    &--lvl-2 {
+      @media (min-width: $menu-desktop-width) {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        transition: opacity $transition-time;
+
+        // stylelint-disable  max-nesting-depth
+        #{$block-name}__item--show-child > &,
+        #{$block-name}__item:hover & {
+          opacity: 1;
+          height: auto;
+          overflow: visible;
+        }
+        // stylelint-enable
+      }
+    }
+
+    &--lvl-3 {
+      @media (min-width: $menu-desktop-width) {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 100%;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        transition: opacity $transition-time;
+
+        // stylelint-disable  max-nesting-depth
+        #{$block-name}__item--show-child > &,
+        #{$block-name}__item--lvl-2:hover & {
+          opacity: 1;
+          height: auto;
+          overflow: visible;
+        }
+        // stylelint-enable
+      }
+    }
+  }
+
+
+
+  // переключатель
+
+  &__toggler {
+    display: inline-block;
+    padding: 0;
+    background: none;
+    border: none;
+
+    .no-js & {
+      display: none;
+    }
+
+    @media (min-width: $menu-desktop-width) {
+      display: none;
+    }
+  }
+}

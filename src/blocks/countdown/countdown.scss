@@ -1,0 +1,44 @@
+@use '../../scss/variables.scss' as *;
+
+.countdown {
+  display: inline-flex;
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: center;
+  color: $main-color;
+
+  $block-name: &; // #{$block-name}__element
+
+  &__inner {
+    display: flex;
+    align-items: center;
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  &__number {
+    &::after {
+      display: inline-block;
+      vertical-align: baseline;
+      content: attr(data-divider);
+      margin-right: 4px;
+      margin-left: 2px;
+      font-size: inherit;
+      font-weight: inherit;
+    }
+  }
+
+  &__deadline-message {
+    display: none;
+    font-size: inherit;
+    font-weight: 700;
+    color: $color-danger;
+
+    &.visible {
+      display: inline-block;
+      vertical-align: baseline;
+    }
+  }
+}

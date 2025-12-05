@@ -1,0 +1,26 @@
+{
+  "name": "node-bem-starter",
+  "version": "0.1.0",
+  "description": "Многофункциональный сборщик проектов на Node, esbuild + БЭМ",
+  "type": "module",
+  "scripts": {
+    "gen:style": "node scripts/generateStyle.js",
+    "gen:entryjs": "node scripts/generateEntryJs.js",
+    "dev": "npm run gen:style && npm run gen:entryjs && vite",
+    "build": "npm run gen:style && npm run gen:entryjs && vite build",
+    "build:extractMedia": "npm run gen:style && npm run gen:entryjs && cross-env EXTRACT_MEDIA=true vite build",
+    "lint:css": "stylelint \"src/**/*.scss\"",
+    "lint:js": "eslint \"src/**/*.js\"",
+    "start": "npm run dev",
+    "create-block": "node createBlock.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss-sort-media-queries": "^5.2.0",
+    "postcss-extract-media-query": "^3.2.0",
+    "cross-env": "^7.0.3",
+    "stylelint": "^16.20.0",
+    "eslint": "^9.28.0",
+    "sass": "^1.89.2"
+  }
+}

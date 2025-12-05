@@ -1,0 +1,120 @@
+@use '../../scss/variables.scss' as *;
+
+$line-height: 1.375em !default;
+$text-color: hsl(0deg 0% 10%) !default;
+$border-color: hsl(0deg 0% 60%) !default;
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 18px;
+
+  // margin-bottom: 60px;
+
+  @media (min-width: $screen-md) {
+    // justify-content: flex-start;
+    margin-top: 20px;
+  }
+
+  $block-name: &; // #{$block-name}__element
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  &__item {
+    margin-right: 0.5em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active {
+      a {
+        color: $main-color;
+        pointer-events: none;
+      }
+    }
+
+    &--prev,
+    &--next {
+
+      #{$block-name}__link {
+        background-size: 8px 14px;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    &--prev {
+      // margin-right: 20px;
+
+      #{$block-name}__link {
+        transform: scale(-1, 1);
+        background-image: svg-load('../blocks/pagination/bg-img/right-arrow-icon.svg', fill=$text-color);
+
+        &:hover,
+        &:focus {
+          background-image: svg-load('../blocks/pagination/bg-img/right-arrow-icon.svg', fill=$white);
+        }
+
+        &--disabled {
+          background-image: svg-load('../blocks/pagination/bg-img/right-arrow-icon.svg', fill=$text-muted);
+        }
+      }
+    }
+
+    &--next {
+      // margin-left: 20px;
+
+      #{$block-name}__link {
+        background-image: svg-load('../blocks/pagination/bg-img/right-arrow-icon.svg', fill=$text-color);
+
+        &:hover,
+        &:focus {
+          background-image: svg-load('../blocks/pagination/bg-img/right-arrow-icon.svg', fill=$white);
+        }
+
+        &--disabled {
+          background-image: svg-load('../blocks/pagination/bg-img/right-arrow-icon.svg', fill=$text-muted);
+        }
+      }
+    }
+  }
+
+  &__link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    color: $text-muted;
+    background-color: $white;
+    border-radius: 0;
+    transition: all 0.2s ease-out;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: $white;
+      background-color: $main-color;
+    }
+
+    &--disabled,
+    &:disabled {
+      // background-color: $light-bg;
+      pointer-events: none;
+    }
+  }
+}

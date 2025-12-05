@@ -1,0 +1,23 @@
+<!--DEV
+@ @include('blocks/text-input/text-input.html', {
+  "id": "id-1",
+  "addClass": "phone-mask",
+  "type": "text",
+  "name": "name",
+  "label": "label",
+  "ifRequired": "required",
+  "errorText": "Ошибка",
+  "tipText": ""
+})
+-->
+
+<div class="text-input">
+  <span class="text-input__tip">@@tipText</span>
+  <div class="text-input__wrapper">
+    <input id="@@id" class="text-input__field  @@addClass" type="@@type" name="@@name" value="" onblur="this.setAttribute('value', this.value);" @@ifRequired>
+    <label class="text-input__label" for="@@id">
+      <span class="text-input__label-content">@@label</span>
+    </label>
+  </div>
+  <span class="text-input__error">@@errorText</span>
+</div>

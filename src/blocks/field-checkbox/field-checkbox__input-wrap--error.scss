@@ -1,0 +1,15 @@
+@use '../../scss/variables.scss' as *;
+
+$color-danger: hsl(2deg 64% 58%) !default;
+
+.field-checkbox {
+  $block-name: &; // #{$block-name}__element
+
+  &__input-wrap--error {
+
+    #{$block-name}__name-text,
+    #{$block-name}__help-text {
+      color: $color-danger;
+    }
+  }
+}

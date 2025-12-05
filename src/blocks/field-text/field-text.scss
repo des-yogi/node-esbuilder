@@ -1,0 +1,77 @@
+@use '../../scss/variables.scss' as *;
+@use '../../scss/mixins' as *;
+@use "sass:math";
+
+.field-text {
+  $block-name: &; // #{$block-name}__element
+
+  display: block;
+  margin-bottom: 32px;
+
+  &__name {
+    @include field-name;
+  }
+
+  &__input-wrap {
+    display: block;
+  }
+
+  &__input {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+
+    // height: 2.125em;
+    padding: $field-padding-vertical  $field-padding-horizontal;
+    margin: 0;
+    line-height: $line-height;
+    font-size: 1em;
+    font-family: inherit;
+    background-color: #fff;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    appearance: textfield;
+
+    &:focus {
+      @include field-focus;
+    }
+
+    &[disabled],
+    &[readonly] {
+      cursor: default;
+      background-color: $gray-lighter;
+    }
+
+    &[type='search']::-webkit-search-cancel-button,
+    &[type='search']::-webkit-search-decoration {
+      -webkit-appearance: none; // stylelint-disable-line  property-no-vendor-prefix
+    }
+
+    &[type='number']::-webkit-inner-spin-button,
+    &[type='number']::-webkit-outer-spin-button {
+      // height: auto;
+    }
+
+    &[type='color'] {
+      // max-width: 100px;
+      padding: 0;
+    }
+
+    &::placeholder {
+      color: $text-muted;
+      opacity: 1;
+    }
+
+    @at-root textarea#{&} {
+      $textarea-height: ($line-height * 2) + ($field-padding-vertical * 2);
+
+      height: auto;
+      min-height: calc(#{$textarea-height} + 2px);
+      resize: vertical;
+    }
+  }
+
+  &__help-text {
+    @include field-help-text;
+  }
+}

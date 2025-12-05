@@ -1,0 +1,87 @@
+@use '../../scss/variables.scss' as *;
+
+$gray-lightest: hsl(0deg 0% 90%) !default;
+$text-color: hsl(0deg 0% 10%) !default;
+$text-color-muted: hsl(0deg 0% 50%) !default;
+$border-color: hsl(0deg 0% 60%) !default;
+$line-height: 1.375em !default;
+$field-padding-vertical: 0.3em !default;
+$field-padding-horizontal: 0.7em !default;
+
+.tabs {
+  $block-name: &; // #{$block-name}__element
+
+  margin-top: $line-height;
+  margin-bottom: $line-height;
+
+  &__links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    cursor: pointer;
+
+    .no-js & {
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      flex-grow: 1;
+      height: 1px;
+      background-color: $border-color;
+    }
+  }
+
+  &__link-wrap {
+    position: relative;
+    border: 1px solid $border-color;
+
+    &:not(:last-child) {
+      border-right: none;
+    }
+
+    &--active {
+
+      #{$block-name}__link {
+        color: $text-color;
+        background-color: #fff;
+      }
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: $field-padding-vertical $field-padding-horizontal;
+    color: $text-muted;
+    text-decoration: none;
+    background-color: $gray-lightest;
+
+    &:hover,
+    &:focus {
+      color: $text-muted;
+    }
+  }
+
+  &__content-wrapper {
+    display: block;
+    padding: $field-padding-vertical $field-padding-horizontal;
+    border: 1px solid $border-color;
+    border-top: none;
+  }
+
+  &__content-item {
+    .js & {
+      display: none;
+    }
+
+    &--active {
+      .js & {
+        display: block;
+      }
+    }
+  }
+}
+

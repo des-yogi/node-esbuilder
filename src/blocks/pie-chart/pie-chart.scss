@@ -1,0 +1,43 @@
+@use '../../scss/variables.scss' as *;
+
+.pie-chart {
+  width: 184px;
+  height: 184px;
+
+  $block-name: &; // #{$block-name}__element
+
+  display: inline-block;
+  position: relative;
+
+  &__svg {
+    display: block;
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+  }
+
+  &__circle-back {
+    fill: #e8eaeb;
+
+    // r: 50; не поддерживатся IE и Firefox
+  }
+
+  &__circle {
+    fill: #fff;
+    stroke: #27b45d;
+
+    // r: 47; не поддерживатся IE и Firefox
+    // толщина строки должна соответствовать значению data-border
+    stroke-width: 6;
+  }
+
+  &__descr {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: 700;
+    color: #232a30;
+  }
+}

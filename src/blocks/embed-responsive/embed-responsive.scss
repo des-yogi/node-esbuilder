@@ -1,0 +1,64 @@
+@use '../../scss/variables.scss' as *;
+@use "sass:math";
+
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    display: block;
+
+    // padding-top: percentage(9 / 16); // по умолчанию ожидается вставка в формате 16/9
+    padding-top: math.percentage(math.div(9, 16));
+  }
+
+  // embed,
+  // object,
+  img,
+  iframe,
+  video {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  &--21-9 { // модификатор на случай вставки 21/9
+
+    &::before {
+      // padding-top: percentage(9 / 21);
+      padding-top: math.percentage(math.div(9, 21));
+    }
+  }
+
+  &--4-3 { // модификатор на случай вставки 4/3
+
+    &::before {
+      // padding-top: percentage(3 / 4);
+      padding-top: math.percentage(math.div(3, 4));
+    }
+  }
+
+  &--3-2 { // модификатор на случай вставки 3/2
+
+    &::before {
+      // padding-top: percentage(2 / 3);
+      padding-top: math.percentage(math.div(2, 3));
+    }
+  }
+
+  &--1-1 { // модификатор на случай вставки 1/1
+
+    &::before {
+      // padding-top: percentage(1 / 1);
+      padding-top: math.percentage(math.div(1, 1));
+    }
+  }
+}

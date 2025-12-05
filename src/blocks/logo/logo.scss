@@ -1,0 +1,8 @@
+@use '../../scss/variables.scss' as *;
+
+.logo {
+  $block-name: &; // #{$block-name}__element
+
+  display: block;
+  white-space: nowrap;
+}

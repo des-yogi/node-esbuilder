@@ -1,0 +1,21 @@
+@use '../../scss/variables.scss' as *;
+@use 'sass:color';
+
+.field-file {
+  $block-name: &; // #{$block-name}__element
+
+  &--error {
+
+    #{$block-name}__name,
+    #{$block-name}__name-text,
+    #{$block-name}__input,
+    #{$block-name}__help-text {
+      color: $color-danger;
+    }
+
+    #{$block-name}__name-text {
+      border-color: $color-danger;
+      background-color: color.scale($color-danger, $lightness: 35%);
+    }
+  }
+}

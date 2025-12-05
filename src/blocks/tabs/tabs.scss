@@ -1,0 +1,7 @@
+@use '../../scss/variables.scss' as *;
+
+.tabs {
+  $block-name: &; // #{$block-name}__element
+
+}
+

@@ -1,0 +1,4 @@
+@forward 'mixins/grid-mixins';
+@forward 'mixins/form-mixins';
+@forward 'mixins/my-mixins';
+@use 'variables.scss' as *; // если сами миксины используют переменные

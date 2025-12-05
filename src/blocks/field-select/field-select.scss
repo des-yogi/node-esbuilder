@@ -1,0 +1,67 @@
+@use '../../scss/variables.scss' as *;
+@use '../../scss/mixins' as *;
+
+.field-select {
+  $block-name: &; // #{$block-name}__element
+
+  display: block;
+  margin-bottom: 32px;
+
+  &__name {
+    @include field-name;
+  }
+
+  &__input-wrap {
+    display: block;
+  }
+
+  &__select {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    padding: $field-padding-vertical $field-padding-horizontal;
+    font-size: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    appearance: none;
+    color: $title-color;
+    background-color: $white;
+    background-image: svg-load('../blocks/field-select/bg-img/select-down.svg', fill=$border-color);
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+
+    &[multiple] {
+      background-image: none;
+      min-height: 6.8em;
+    }
+
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:hover {
+      border-color: $link-color-hover;
+    }
+
+    &:active,
+    &:focus {
+      @include field-focus;
+    }
+
+    &[disabled],
+    &[readonly] {
+      cursor: default;
+      color: $text-muted;
+      border-color: $text-muted;
+      background-color: $white;
+    }
+  }
+
+  &__help-text {
+    @include field-help-text;
+  }
+}

@@ -1,0 +1,66 @@
+@use '../../scss/variables.scss' as *;
+
+$line-height: 1.375em !default;
+$text-color: hsl(0deg 0% 10%) !default;
+
+.breadcrumbs {
+  margin-top: 25px;
+  margin-bottom: 25px;
+
+  $block-name: &;
+
+  // #{$block-name}__element
+
+  &__list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+
+  &__item {
+    display: inline-block;
+    vertical-align: baseline;
+    max-width: 100%;
+    margin-right: 0.6em;
+    margin-bottom: 0.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (min-width: $screen-md) {
+      margin-bottom: 0;
+    }
+
+    &:not(:last-child)::after {
+      content: '|'; // U+276F, HTML-код &#10095; CSS-код  \276F - Прававя угловая скобка
+      display: inline-block;
+      margin-left: 0.8em;
+      font-weight: 700;
+      color: $text-muted;
+    }
+
+    &:last-child {
+
+      #{$block-name}__link {
+        text-decoration: none;
+        color: $main-color;
+      }
+    }
+  }
+
+  &__link {
+    max-width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    color: $text-muted;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      color: $main-color;
+
+      // text-decoration: none;
+    }
+  }
+}

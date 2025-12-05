@@ -1,0 +1,388 @@
+@use '../../scss/variables.scss' as *;
+@use '../../scss/mixins.scss' as *;
+@use "sass:math";
+@use "sass:color";
+
+// Make viewport great again (responsive)
+// http://timkadlec.com/2012/10/ie10-snap-mode-and-responsive-design/
+@at-root {
+  @-ms-viewport { // stylelint-disable-line  at-rule-no-vendor-prefix
+    width: device-width;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.page { // html
+
+  $block-name: &; // #{$block-name}__element
+
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+  -ms-overflow-style: scrollbar;
+  -ms-text-size-adjust: 100%; // stylelint-disable-line  property-no-vendor-prefix
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+
+  // font-size: 15px;
+
+  &__inner {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__content {
+    flex-grow: 1;
+  }
+
+  &__footer-wrapper {
+    flex-shrink: 0;
+  }
+
+  * {
+    // Firefox only
+
+    /* «цвет ползунка» «цвет полосы скроллбара» */
+    scrollbar-color: $main-color $gray-lightest;
+
+    // color1 (wdtn ползунка) color2 (цвет всего скролбара)
+    scrollbar-width: thin;  /* толщина */
+
+    // for webkit browsers (Chrome, Opera, Safary, Edge ets.)
+    // Here is a complete list of all the new pseudo-elements. All of these pseudo-elements must be prefixed with -webkit-:
+    // scrollbar
+    // scrollbar-button
+    // scrollbar-track
+    // scrollbar-track-piece
+    // scrollbar-thumb
+    // scrollbar-corner
+    // resize
+
+    /* полоса прокрутки (скроллбар) */
+    ::-webkit-scrollbar {
+      width: 6px; /* ширина для вертикального скролла */
+      height: 6px; /* высота для горизонтального скролла */
+      background-color: $gray-lightest;
+    }
+
+    /* ползунок скроллбара */
+    ::-webkit-scrollbar-thumb {
+      background-color: $main-color;
+      border-radius: 8px;
+      box-shadow: none;
+
+      // box-shadow: inset 1px 1px 10px #f3faf7;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      // background-color: darken($main-color, 5%);
+      background-color: color.scale($main-color, $lightness: 5%);
+    }
+  }
+
+  // Theme toggler classes - Start
+
+  &.no-transition *,
+  &.no-transition{
+    transition: none !important;
+  }
+
+  &.theme-transition * {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  // Theme toggler classes - End
+}
+
+body {
+  // Типографика проекта — в блоке typo
+  display: flex;           // Исправляем баг в IE для min-height and flexbox (flex-direction:column)
+  flex-direction: column;  // и прижимаем footer в IE 10-11
+  background-color: var(--bg-color);
+  margin: 0;
+  min-height: 100%;
+}
+
+[tabindex='-1']:focus {
+  outline: none !important; // stylelint-disable-line  declaration-no-important
+}
+
+// iOS 'clickable elements' fix for role='button'
+[role='button'] {
+  cursor: pointer;
+}
+
+// Мы любим Сафари (на самом деле, нет).
+[type="search"]::-webkit-search-decoration {
+  appearance: none;
+}
+
+// Avoid 300ms click delay on touch devices that support the `touch-action` CSS property.
+a,
+// area,
+button,
+[role='button'],
+input,
+label,
+select,
+// summary,
+textarea {
+  touch-action: manipulation; // Стилевая коррекция 300ms задержки (для поддерживающих браузеров)
+  margin: 0;                  // Убираем margin в Firefox и Safari
+}
+
+button,
+input {
+  overflow: visible;    // Покажем торчащее в Edge
+  text-transform: none; // Уберём наследование text transform в Firefox
+}
+
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+  appearance: auto; // Коррекция проблем стилизации для Safari
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  padding: 0;
+  border-style: none;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  appearance: auto; // Коррекция для Mobile Safari (https://github.com/twbs/bootstrap/issues/11266)
+}
+
+textarea {
+  overflow: auto;   // Удаление верт. скролла в IE.
+  resize: vertical; // Правильное изменение размеров
+}
+
+// Фикс для исправления закругленных углов на iPhone/Safari
+// textarea,
+// input[type="text"],
+// input[type="search"],
+// input[type="button"],
+// input[type="submit"] {
+//  -webkit-appearance: none;
+//  border-radius: 0;
+// background-image: linear-gradient(to bottom, #e4e4e4, #f7f7f7);
+// border: 1px solid #afafaf;
+// }
+
+// Мы любим Edge, это браузер! (почти)
+svg {
+  fill: currentcolor;
+
+  a &,
+  button & {
+    pointer-events: none;
+  }
+
+  &:not(:root) {
+    overflow: hidden; // Скрыть выступающее за границы в IE
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: $link-color;
+  background-color: transparent;
+  transition: color 0.3s;
+
+  &:hover,
+  &:focus {
+    color: $link-color-hover;
+  }
+
+  // &:visited {
+  //   color: $link-color-hover;
+  // }
+
+  // На больших экранах телефоны-ссылки делаем обычным текстом (если надо)
+  &[href^="tel:"] {
+    /* @media (min-width: $screen-xl) {
+      white-space: nowrap;
+      pointer-events: none;
+      text-decoration: inherit;
+      color: inherit;
+    } */
+  }
+}
+
+// BS4 Хелперы для BS4 табов и т.п.
+
+/* .fade {
+  transition: opacity 0.15s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade {
+    transition: none;
+  }
+}
+
+.fade:not(.show) {
+  opacity: 0;
+}
+
+.collapse {
+  transition: all 0.3s ease-out;
+}
+
+.collapse:not(.show) {
+  display: none;
+} */
+
+.fade {
+  @include transition($transition-fade);
+
+  &:not(.show) {
+    opacity: 0;
+  }
+}
+
+.collapse {
+  &:not(.show) {
+    display: none;
+  }
+}
+
+.collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+
+  @include transition($transition-collapse);
+}
+
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+.clearfix {
+  &::before,
+  &::after {
+    content: "";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+.list-nostyled {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+
+  li::before {
+    display: none;
+  }
+}
+
+/* Кастомизируем выделение текста на сайте */
+*:not(img)::selection {
+  color: $white;
+  background-color: $main-color; /* Safari, Chrome, Opera */
+}
+
+/*
+  This will hide the focus indicator if the element receives focus via the mouse,
+  but it will still show up on keyboard focus.
+*/
+
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+.container {
+  display: block;
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+  background: none;
+
+  @media (min-width: $screen-md) {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  @media (min-width: $screen-xl) {
+    $padding-min: 32px; // нужный отступ от краев экрана
+    // padding: 1em calc(50% - 600px); //600px - это $screen-xl / 2 - нужный отступ от края экрана
+    $half-screen-xl: math.div($screen-xl, 2) - $padding-min;
+
+    padding-left: calc(50% - #{$half-screen-xl});
+    padding-right: calc(50% - #{$half-screen-xl});
+  }
+}
+
+// Родитель. Указаны промежутки между ячейками: XS|SM|MD|LG|XL|XXL;
+// @include row($grid-gutter-width, 10px, 12px, 16px, 20px, 26px);
+.row {
+  @include row(
+    $xs-grid-gutter:  $grid-gutter-width,
+    $sm-grid-gutter:  $grid-gutter-width,
+    $md-grid-gutter:  $grid-gutter-width,
+    $lg-grid-gutter:  $grid-gutter-width,
+    $xl-grid-gutter:  $grid-gutter-width,
+    $xxl-grid-gutter: $grid-gutter-width
+  );
+}
+
+/* &__element {
+  @include col(); // малые ширины — 12 из 12, промежутки по умолчанию
+  @include col(sm, 6, $grid-columns, 10px);  // SM (480 по умолчанию) — 6 из 12, промежутки 10px
+  @include col(md, 4, $grid-columns, 12px);  // MD (768 по умолчанию) — 4 из 12, промежутки 12px
+  @include col(lg, 3, $grid-columns, 16px);  // LG (992 по умолчанию) — 3 из 12, промежутки 16px
+  @include col(xl, 2, $grid-columns, 20px);  // XL (1200 по умолчанию) — 2 из 12, промежутки 20px
+  @include col(xxl, 1, $grid-columns, 26px); // XXL (1800 по умолчанию) — 1 из 12, промежутки 26px
+} */
+
+
+// background: svg-load('../blocks/phones-modal/bg-img/phone.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+
+.invisible-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.test-col {
+  @include col(xs, 12);
+  @include col(sm, 6);
+  @include col(md, 4);
+  @include col(lg, 3);
+}
