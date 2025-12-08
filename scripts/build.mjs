@@ -40,7 +40,12 @@ export async function build({ mode = 'development' } = {}) {
 }
 
 // Позволяем запускать модуль напрямую: `node scripts/build.mjs`
-if (import.meta.url === `file://${__filename}`) {
+// Используем надёжную проверку, совместимую с Windows и POSIX
+const isMainModule =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (isMainModule) {
   const mode = process.env.NODE_ENV || 'development';
   build({ mode }).catch((err) => {
     console.error('[build] Ошибка сборки:', err);

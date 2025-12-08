@@ -1,9 +1,10 @@
 @use '../../scss/variables.scss' as *;
 
 .test-block {
-  background: lightcoral;
-
   $block-name: &; // #{$block-name}__element
+
+  color: var(--text-color);
+  background: var(--bg-color);
 
   @media (width >= 768px) {
     background: blue;
@@ -23,11 +24,12 @@
     font-size: 20px;
     font-weight: 500;
     color: #f00;
-    cursor: pointer;
     background-color: paleturquoise;
     background-position: center left 10px;
     background-repeat: no-repeat;
     background-size: contain;
     background-image: svg-load('../blocks/sprite-svg/svg/left-arrow-s.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+    border: 2px solid var(--border-color);
+    cursor: pointer;
   }
 }
