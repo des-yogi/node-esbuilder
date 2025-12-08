@@ -1,51 +1,66 @@
-/**
- * Модуль для копирования ассетов (без оптимизации):
- * - шрифты: src/fonts/* → build/fonts/;
- * - изображения: src/img/... и src/blocks/.../img/... → build/img/;
- *   (имеется в виду рекурсивное копирование всех файлов в этих каталогах)
- * - опционально: видео.
- *
- * На первом этапе можно сделать простой рекурсивный cp для основных папок,
- * а потом заменить/расширить через glob-паттерны.
- */
-import { mkdir, cp } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { mkdir, copyFile } from 'node:fs/promises';
+import { getFilesList } from './config.mjs';
+
+/**
+ * Копирование ассетов:
+ * - картинки (img) → build/img/<имя_файла>  (плоская структура)
+ * - видео (video) → build/video/<имя_файла> (плоская структура)
+ * - при необходимости сюда же можно добавить шрифты и прочие файлы.
+ */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const srcDir = path.join(rootDir, 'src');
 const buildDir = path.join(rootDir, 'build');
+const buildImgDir = path.join(buildDir, 'img');
+const buildVideoDir = path.join(buildDir, 'video');
+
+async function copyFlat(files, destDir, label) {
+  if (!files || files.length === 0) {
+    console.log(`[assets] Нет файлов для копирования (${label}), пропускаем`);
+    return;
+  }
+
+  await mkdir(destDir, { recursive: true });
+
+  for (const srcPath of files) {
+    const fileName = path.basename(srcPath);
+    const destPath = path.join(destDir, fileName);
+
+    try {
+      await copyFile(srcPath, destPath);
+      console.log(
+        `[assets] Копирован ${label}:`,
+        path.relative(rootDir, destPath),
+      );
+    } catch (err) {
+      console.error(
+        `[assets] Не удалось скопировать ${label} "${srcPath}" → "${destPath}":`,
+        err,
+      );
+    }
+  }
+}
 
 export async function copyAssets() {
   console.log('[assets] Копирование ассетов (без оптимизации)');
 
-  // Шрифты
-  const srcFonts = path.join(srcDir, 'fonts');
-  const destFonts = path.join(buildDir, 'fonts');
-  await mkdir(destFonts, { recursive: true });
-  await safeCopy(srcFonts, destFonts);
+  const { img, video } = await getFilesList();
 
-  // Картинки (общая папка)
-  const srcImg = path.join(srcDir, 'img');
-  const destImg = path.join(buildDir, 'img');
-  await mkdir(destImg, { recursive: true });
-  await safeCopy(srcImg, destImg);
+  // Картинки → build/img
+  await copyFlat(img, buildImgDir, 'изображение');
 
-  // TODO: добавить копирование изображений из src/blocks/<block>/img/*
-  // Можно будет использовать fast-glob, когда будем готовы добавить зависимость.
+  // Видео → build/video
+  await copyFlat(video, buildVideoDir, 'видео');
 
   console.log('[assets] Копирование ассетов завершено');
 }
 
-async function safeCopy(from, to) {
-  // cp в Node 16+ поддерживает рекурсивное копирование
-  await cp(from, to, { recursive: true, force: true });
-}
-
-if (import.meta.url === `file://${import.meta.url}`) {
+// Позволяем запускать модуль напрямую: `node scripts/assets.mjs`
+if (import.meta.url === `file://${__filename}`) {
   copyAssets().catch((err) => {
     console.error('[assets] Ошибка копирования ассетов:', err);
     process.exitCode = 1;

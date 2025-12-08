@@ -8,13 +8,20 @@
     "page": []
   },
   "addCssBefore": [
-    "src/scss/variables.scss"
+    "src/scss/variables.scss",
+    "src/scss/mixins.scss"
   ],
-  "addCssAfter": [],
+  "addCssAfter": [
+    "src/scss/print.scss"
+  ],
   "addJsBefore": [],
   "addJsAfter": [],
-  "copiedJs": [],
-  "copiedCss": [],
+  "copiedJs": [
+    "src/js/libs/bootstrap.bundle.min.js"
+  ],
+  "copiedCss": [
+    "src/css/bootstrap.min.css"
+  ],
   "addImages": [],
   "singleCompiled": [],
   "lintCss": true,

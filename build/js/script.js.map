@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/js/index.js"],
+  "sourcesContent": ["console.log('node-esbuilder: main JS entry');\n"],
+  "mappings": ";;AAAA,UAAQ,IAAI,+BAA+B;",
+  "names": []
+}

@@ -3,7 +3,11 @@
 // Не редактируйте его вручную — изменения будут перезаписаны при следующей генерации.
 // Подключения из addCssBefore:
 @use './variables' as *;
+@use './mixins' as *;
 
 // SCSS-файлы блоков из projectConfig.blocks:
 @use '../blocks/page/page';
+
+// Подключения из addCssAfter:
+@use './print' as *;
 
