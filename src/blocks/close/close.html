@@ -1,14 +1,9 @@
 <!--DEV
-
-Для использования этого файла как шаблона:
-
-@ @include('blocks/close/close.html')
-
-(Нужно убрать пробел между символами @)
-Подробнее: https://www.npmjs.com/package/gulp-file-include
-
-
-
-<span class="close" aria-label="Закрыть"><span></span></span>
+@ @include('blocks/close/close.html', {
+  "addClass": "",
+  "title": ""
+})
 
 -->
+
+<span class="close  @@addClass" aria-label="Закрыть"><span>@@title</span></span>

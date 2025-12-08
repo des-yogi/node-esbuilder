@@ -8,11 +8,13 @@ import { buildScripts } from './scripts.mjs';
 import { buildHtml } from './html.mjs';
 import { copyAssets } from './assets.mjs';
 
+console.log('[dev-server] файл загружен'); // МАЯЧОК
+
 /**
  * Dev-сервер:
  * - выполняет полную сборку в dev-режиме;
  * - поднимает browser-sync на папку build/;
- * - вешает вотчеры на src/**\/* и дергает соответствующие задачи.
+ * - вешает вотчеры на все файлы в src/ и дергает соответствующие задачи.
  */
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,8 +24,12 @@ const srcDir = path.join(rootDir, 'src');
 const buildDir = path.join(rootDir, 'build');
 
 export async function devServer() {
+  console.log('[dev-server] devServer() старт');
+
   // 1. начальная сборка
   await build({ mode: 'development' });
+
+  console.log('[dev-server] build() завершился');
 
   // 2. старт browser-sync
   const bs = browserSync.create();
@@ -62,10 +68,22 @@ export async function devServer() {
   });
 }
 
-// Позволяем запускать модуль напрямую: `node scripts/dev-server.mjs`
-if (import.meta.url === `file://${__filename}`) {
+// --- Автозапуск при прямом запуске файла ---
+// Вместо сравнения URL используем process.argv[1]
+const isMainModule =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(__filename);
+
+console.log('[dev-server] перед проверкой isMainModule, argv[1]=', process.argv[1]);
+console.log('[dev-server] __filename =', __filename);
+console.log('[dev-server] isMainModule =', isMainModule);
+
+if (isMainModule) {
+  console.log('[dev-server] автозапуск через isMainModule');
   devServer().catch((err) => {
     console.error('[dev-server] Ошибка dev-сервера:', err);
     process.exitCode = 1;
   });
+} else {
+  console.log('[dev-server] импортирован как модуль, автозапуск не нужен');
 }
