@@ -5,12 +5,14 @@ import { buildStyles } from './styles.mjs';
 import { buildScripts } from './scripts.mjs';
 import { copyAssets } from './assets.mjs';
 import { buildHtml } from './html.mjs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 /**
  * Оркестратор сборки.
  * Последовательность (пока без параллелизма, для простоты отладки):
  * 1) clean
- * 2) generateStyle (после реализации getFilesList)
+ * 2) generateStyle
  * 3) sprite-svg
  * 4) styles
  * 5) scripts
@@ -18,7 +20,11 @@ import { buildHtml } from './html.mjs';
  * 7) html
  */
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export async function build({ mode = 'development' } = {}) {
+  console.log('[build] ВХОД в функцию build (debug)');
   console.log(`[build] Старт полной сборки в режиме "${mode}"`);
 
   await cleanBuild();
@@ -29,10 +35,12 @@ export async function build({ mode = 'development' } = {}) {
   await copyAssets();
   await buildHtml();
 
+  console.log('[build] ВЫХОД из функции build (debug)');
   console.log('[build] Сборка завершена');
 }
 
-if (import.meta.url === `file://${import.meta.url}`) {
+// Позволяем запускать модуль напрямую: `node scripts/build.mjs`
+if (import.meta.url === `file://${__filename}`) {
   const mode = process.env.NODE_ENV || 'development';
   build({ mode }).catch((err) => {
     console.error('[build] Ошибка сборки:', err);

@@ -1,7 +1,7 @@
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import sass from 'sass';
+import * as sass from 'sass';
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
 import sortMediaQueries from 'postcss-sort-media-queries';
@@ -14,7 +14,7 @@ import customPlugins from '../customPostcss.js';
  * - взять сгенерированный src/scss/style.scss;
  * - скомпилировать его через Dart Sass;
  * - прогнать результат через PostCSS (autoprefixer, sort-media-queries, postcss-inline-svg и т.д.);
- * - записать итоговый файл build/css/style.min.css (или style.css в dev-режиме).
+ * - записать итоговый файл build/css/style.css.
  */
 
 const __filename = fileURLToPath(import.meta.url);

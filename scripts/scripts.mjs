@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { mkdir } from 'node:fs/promises';
 import esbuild from 'esbuild';
 import { getFilesList } from './config.mjs';
 
@@ -7,9 +8,9 @@ import { getFilesList } from './config.mjs';
  * Модуль для сборки JavaScript через esbuild.
  *
  * Задачи:
- * - собрать список файлов на основе lists.js + addJsBefore/addJsAfter (см. projectConfig.json и getFilesList);
- * - передать их в esbuild как entryPoints или через виртуальный entry-файл;
- * - получить build/js/script.min.js.
+ * - собрать список файлов на основе projectConfig.json и getFilesList();
+ * - гарантировать порядок: js.before → js.blocks → js.after;
+ * - передать их в esbuild и получить единый бандл build/js/script.js.
  */
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,23 +24,38 @@ export async function buildScripts({ mode = 'development' } = {}) {
 
   const { js } = await getFilesList();
 
-  // TODO: вместо этого — реальная логика формирования entryPoints,
-  // учитывая addJsBefore/addJsAfter и блоки.
-  const entryPoints = js.length ? js.map((p) => path.join(rootDir, 'src', p)) : [];
+  const before = Array.isArray(js?.before) ? js.before : [];
+  const blocks = Array.isArray(js?.blocks) ? js.blocks : [];
+  const after = Array.isArray(js?.after) ? js.after : [];
 
-  await esbuild.build({
-    entryPoints: entryPoints.length ? entryPoints : ['src/js/index.js'], // TODO: убрать захардкоженный путь
-    bundle: true,
-    outfile: outFile,
-    format: 'iife', // можно потом сделать configurable
-    sourcemap: mode !== 'production',
-    minify: mode === 'production',
-    target: ['es2019'],
-  });
+  // Итоговый список в нужном порядке (относительно корня src/)
+  const orderedJs = [...before, ...blocks, ...after];
 
-  console.log(`[scripts] Скрипты собраны: ${path.relative(rootDir, outFile)}`);
+  // Если списки пусты — fallback на src/js/index.js
+  const entryPoints = orderedJs.length ? orderedJs.map((rel) => path.join(rootDir, rel)) : [path.join(rootDir, 'src/js/index.js')];
+
+  // Убедимся, что выходная директория существует
+  await mkdir(outDir, { recursive: true });
+
+  try {
+    await esbuild.build({
+      entryPoints,
+      bundle: true,
+      outfile: outFile,               // один общий бандл
+      sourcemap: mode !== 'production',
+      minify: mode === 'production',
+      target: ['es2019'],
+      format: 'iife',
+    });
+
+    console.log(`[scripts] Скрипты собраны: ${path.relative(rootDir, outFile)}`);
+  } catch (err) {
+    console.error('[scripts] Ошибка сборки скриптов:', err);
+    throw err;
+  }
 }
 
+// Позволяем запускать модуль напрямую
 if (import.meta.url === `file://${__filename}`) {
   const mode = process.env.NODE_ENV || 'development';
   buildScripts({ mode }).catch((err) => {

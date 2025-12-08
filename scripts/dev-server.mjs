@@ -6,14 +6,6 @@ import { build } from './build.mjs';
 import { buildStyles } from './styles.mjs';
 import { buildScripts } from './scripts.mjs';
 import { buildHtml } from './html.mjs';
-import { copyAssets } from './assets.mjs';
-
-/**
- * Dev-сервер:
- * - выполняет полную сборку в dev-режиме;
- * - поднимает browser-sync на папку build/;
- * - вешает вотчеры на src/**/* и дергает соответствующие задачи.
- */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
