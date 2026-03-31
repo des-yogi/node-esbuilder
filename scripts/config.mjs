@@ -96,8 +96,6 @@ export async function getFilesList() {
       copied: projectConfig.copiedJs ?? [],
       all: jsAll,
     },
-    img: projectConfig.addImages ?? [],
-    video: projectConfig.addVideo ?? [],
     blocksDirs: blockNames.map((name) => `${blocksRoot}/${name}`),
     projectConfig,
   };

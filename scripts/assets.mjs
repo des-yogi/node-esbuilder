@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readdir, copyFile, access } from 'node:fs/promises';
+import { getFilesList } from './config.mjs';
 import { logInfo, logWarn, logError } from './logger.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,8 +11,30 @@ const rootDir = path.resolve(__dirname, '..');
 const srcDir = path.join(rootDir, 'src');
 const buildDir = path.join(rootDir, 'build');
 
-// Рекурсивно копирует srcRoot → destRoot (fonts, глобальные img/video)
-async function copyDirRecursive(srcRoot, destRoot, label) {
+/**
+ * Проверяет, разрешено ли расширение файла.
+ * Если allowedExts = null или пустой массив — разрешено всё.
+ *
+ * @param {string} fileName — имя файла (например, "photo.jpg")
+ * @param {string[]|null} allowedExts — ["jpg", "png", ...] или null
+ * @returns {boolean}
+ */
+function isExtAllowed(fileName, allowedExts) {
+  if (!allowedExts || allowedExts.length === 0) return true;
+  const ext = path.extname(fileName).slice(1).toLowerCase();
+  return allowedExts.includes(ext);
+}
+
+/**
+ * Рекурсивно копирует srcRoot → destRoot (fonts, глобальные img/video).
+ * Если передан allowedExts — копирует только файлы с перечисленными расширениями.
+ *
+ * @param {string} srcRoot
+ * @param {string} destRoot
+ * @param {string} label — для логов ("шрифт", "изображение", "видео")
+ * @param {string[]|null} allowedExts — белый список расширений или null (всё)
+ */
+async function copyDirRecursive(srcRoot, destRoot, label, allowedExts) {
   try {
     const entries = await readdir(srcRoot, { withFileTypes: true });
 
@@ -21,8 +44,12 @@ async function copyDirRecursive(srcRoot, destRoot, label) {
 
       if (entry.isDirectory()) {
         await mkdir(destPath, { recursive: true });
-        await copyDirRecursive(srcPath, destPath, label);
+        await copyDirRecursive(srcPath, destPath, label, allowedExts);
       } else if (entry.isFile()) {
+        if (!isExtAllowed(entry.name, allowedExts)) {
+          logInfo(`[assets] Пропущен ${label} (расширение не в списке): ${entry.name}`);
+          continue;
+        }
         await mkdir(path.dirname(destPath), { recursive: true });
         await copyFile(srcPath, destPath);
         logInfo(`[assets] Копирован ${label}: ` + path.relative(rootDir, destPath));
@@ -67,8 +94,13 @@ async function getUniqueDestPath(destDir, fileName) {
   }
 }
 
-// Копирует файлы из src/blocks/*/img/ в build/img по плоской схеме
-async function copyBlockImagesFlat() {
+/**
+ * Копирует файлы из src/blocks/* /img/ в build/img по плоской схеме.
+ * Фильтрует по allowedExts (если задан).
+ *
+ * @param {string[]|null} allowedExts
+ */
+async function copyBlockImagesFlat(allowedExts) {
   const blocksRoot = path.join(srcDir, 'blocks');
   const buildImgDir = path.join(buildDir, 'img');
 
@@ -87,6 +119,11 @@ async function copyBlockImagesFlat() {
 
         for (const entry of entries) {
           if (!entry.isFile()) continue;
+
+          if (!isExtAllowed(entry.name, allowedExts)) {
+            logInfo(`[assets] Пропущен изображение блока (расширение не в списке): ${blockName}/img/${entry.name}`);
+            continue;
+          }
 
           const srcPath = path.join(blockImgDir, entry.name);
           const destPath = path.join(buildImgDir, entry.name); // плоско по имени файла
@@ -117,8 +154,13 @@ async function copyBlockImagesFlat() {
   }
 }
 
-// Копирует файлы из src/blocks/*/video/ в build/video по плоской схеме с уникализацией имён
-async function copyBlockVideosFlat() {
+/**
+ * Копирует файлы из src/blocks/* /video/ в build/video по плоской схеме
+ * с уникализацией имён. Фильтрует по allowedExts (если задан).
+ *
+ * @param {string[]|null} allowedExts
+ */
+async function copyBlockVideosFlat(allowedExts) {
   const blocksRoot = path.join(srcDir, 'blocks');
   const buildVideoDir = path.join(buildDir, 'video');
 
@@ -137,6 +179,11 @@ async function copyBlockVideosFlat() {
 
         for (const entry of entries) {
           if (!entry.isFile()) continue;
+
+          if (!isExtAllowed(entry.name, allowedExts)) {
+            logInfo(`[assets] Пропущен видео блока (расширение не в списке): ${blockName}/video/${entry.name}`);
+            continue;
+          }
 
           const srcPath = path.join(blockVideoDir, entry.name);
           const uniqueDestPath = await getUniqueDestPath(
@@ -175,6 +222,15 @@ async function copyBlockVideosFlat() {
 export async function copyAssets() {
   logInfo('[assets] Копирование ассетов (без оптимизации)');
 
+  // Читаем белые списки расширений из projectConfig
+  const { projectConfig } = await getFilesList();
+  const imgExts = Array.isArray(projectConfig.allowedImageExtensions)
+    ? projectConfig.allowedImageExtensions
+    : null; // null = копировать всё (обратная совместимость)
+  const videoExts = Array.isArray(projectConfig.allowedVideoExtensions)
+    ? projectConfig.allowedVideoExtensions
+    : null;
+
   const srcFonts = path.join(srcDir, 'fonts');
   const destFonts = path.join(buildDir, 'fonts');
 
@@ -184,20 +240,20 @@ export async function copyAssets() {
   const srcVideo = path.join(srcDir, 'video');
   const destVideo = path.join(buildDir, 'video');
 
-  // Шрифты: src/fonts/** → build/fonts/**
-  await copyDirRecursive(srcFonts, destFonts, 'шрифт');
+  // Шрифты: src/fonts/** → build/fonts/** (без фильтра — мусора в шрифтах не бывает)
+  await copyDirRecursive(srcFonts, destFonts, 'шрифт', null);
 
-  // Глобальные картинки: src/img/** → build/img/**
-  await copyDirRecursive(srcImg, destImg, 'изображение');
+  // Глобальные картинки: src/img/** → build/img/** (с фильтром)
+  await copyDirRecursive(srcImg, destImg, 'изображение', imgExts);
 
-  // Картинки блоков: src/blocks/*/img/* → build/img/<имя файла>
-  await copyBlockImagesFlat();
+  // Картинки блоков: src/blocks/*/img/* → build/img/<имя файла> (с фильтром)
+  await copyBlockImagesFlat(imgExts);
 
-  // Глобальное видео: src/video/** → build/video/**
-  await copyDirRecursive(srcVideo, destVideo, 'видео');
+  // Глобальное видео: src/video/** → build/video/** (с фильтром)
+  await copyDirRecursive(srcVideo, destVideo, 'видео', videoExts);
 
-  // Видео блоков: src/blocks/*/video/* → build/video/<имя файла> (с уникальными именами)
-  await copyBlockVideosFlat();
+  // Видео блоков: src/blocks/*/video/* → build/video/<имя файла> (с фильтром + уникализация)
+  await copyBlockVideosFlat(videoExts);
 
   logInfo('[assets] Копирование ассетов завершено');
 }
@@ -209,7 +265,7 @@ const isMainModule =
 
 if (isMainModule) {
   copyAssets().catch((err) => {
-    logError('[assets] Ошибка копирования ассетов: ' + err.message);
+    logError('[assets] Ошибка копирования ассето��: ' + err.message);
     process.exitCode = 1;
   });
 }

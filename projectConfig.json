@@ -24,7 +24,12 @@
   "copiedCss": [
     "src/css/bootstrap.min.css"
   ],
-  "addImages": [],
+  "allowedImageExtensions": [
+    "jpg", "jpeg", "png", "gif", "svg", "ico", "webp", "avif"
+  ],
+  "allowedVideoExtensions": [
+    "mp4", "webm", "ogv"
+  ],
   "singleCompiled": [],
   "lintCss": true,
   "lintJs": false
