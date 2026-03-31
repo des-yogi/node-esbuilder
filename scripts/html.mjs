@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { logInfo, logWarn, logError } from './logger.mjs';
 
 /**
  * Сборка HTML:
@@ -178,7 +179,7 @@ async function expandIncludes(content, baseRelDir, context, stack) {
 }
 
 export async function buildHtml() {
-  console.log('[html] Старт сборки HTML с инклюдами и переменными');
+  logInfo('[html] Старт сборки HTML с инклюдами и переменными');
 
   await mkdir(buildDir, { recursive: true });
 
@@ -186,7 +187,7 @@ export async function buildHtml() {
   try {
     entries = await readdir(srcDir, { withFileTypes: true });
   } catch (err) {
-    console.error('[html] Не удалось прочитать каталог src:', err);
+    logError('[html] Не удалось прочитать каталог src: ' + err.message);
     throw err;
   }
 
@@ -196,13 +197,13 @@ export async function buildHtml() {
     .sort();
 
   if (htmlFiles.length === 0) {
-    console.log('[html] В src/ нет HTML-файлов, пропускаем HTML-сборку');
+    logWarn('[html] В src/ нет HTML-файлов, пропускаем HTML-сборку');
     return;
   }
 
   for (const fileName of htmlFiles) {
-    const relPath = fileName; // файлы только в корне src
-    let processed = await processHtmlFile(relPath, {} /* глобальный контекст */);
+    const relPath = fileName;
+    let processed = await processHtmlFile(relPath, {});
 
     // Удаляем DEV-комментарии <!--DEV ... -->
     processed = processed.replace(DEV_COMMENT_RE, '');
@@ -210,16 +211,20 @@ export async function buildHtml() {
     const destPath = path.join(buildDir, fileName);
     await writeFile(destPath, processed, 'utf8');
 
-    console.log('[html] Собран HTML:', path.relative(rootDir, destPath));
+    logInfo('[html] Собран HTML: ' + path.relative(rootDir, destPath));
   }
 
-  console.log('[html] Сборка HTML завершена');
+  logInfo('[html] Сборка HTML завершена');
 }
 
 // Позволяем запускать модуль напрямую: `node scripts/html.mjs`
-if (import.meta.url === `file://${__filename}`) {
+const isMainModule =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (isMainModule) {
   buildHtml().catch((err) => {
-    console.error('[html] Ошибка сборки HTML:', err);
+    logError('[html] Ошибка сборки HTML: ' + err.message);
     process.exitCode = 1;
   });
 }

@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getFilesList } from './config.mjs';
+import { logInfo, logError } from './logger.mjs';
 
 /**
  * Генерация файла src/scss/style.scss на основе списков файлов из getFilesList().
@@ -49,7 +50,7 @@ function toUsePath(absLikePathFromRoot) {
 
 export async function generateStyleEntry() {
   const { css } = await getFilesList();
-  console.log('[generateStyle] css from getFilesList =', css);
+  logInfo('[generateStyle] Генерация style.scss');
 
   const headerComment = [
     '// ВНИМАНИЕ!',
@@ -95,12 +96,16 @@ export async function generateStyleEntry() {
   await mkdir(srcScssDir, { recursive: true });
   await writeFile(styleEntryPath, content, 'utf8');
 
-  console.log('[generateStyle] style.scss сгенерирован:', path.relative(rootDir, styleEntryPath));
+  logInfo('[generateStyle] style.scss сгенерирован: ' + path.relative(rootDir, styleEntryPath));
 }
 
-if (import.meta.url === `file://${__filename}`) {
+const isMainModule =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (isMainModule) {
   generateStyleEntry().catch((err) => {
-    console.error('[generateStyle] Ошибка генерации style.scss:', err);
+    logError('[generateStyle] Ошибка генерации style.scss: ' + err.message);
     process.exitCode = 1;
   });
 }

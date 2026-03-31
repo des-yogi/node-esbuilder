@@ -10,20 +10,21 @@
     "gen:style": "node scripts/generateStyle.mjs",
     "lint:css": "stylelint \"src/**/*.scss\"",
     "lint:js": "eslint \"src/**/*.js\"",
-    "create-block": "node createBlock.js"
+    "create-block": "node createBlock.mjs"
   },
   "devDependencies": {
-    "esbuild": "^0.27.1",
-    "browser-sync": "^3.0.4",
-    "postcss": "^8.5.6",
     "autoprefixer": "^10.4.21",
-    "postcss-inline-svg": "^6.0.0",
-    "postcss-sort-media-queries": "^5.2.0",
-    "postcss-extract-media-query": "^3.2.0",
+    "browser-sync": "^3.0.4",
+    "chalk": "^5.6.2",
     "chokidar": "^4.0.1",
     "cross-env": "^7.0.3",
-    "stylelint": "^16.20.0",
+    "esbuild": "^0.27.1",
     "eslint": "^9.28.0",
-    "sass": "^1.89.2"
+    "postcss": "^8.5.6",
+    "postcss-extract-media-query": "^3.2.0",
+    "postcss-inline-svg": "^6.0.0",
+    "postcss-sort-media-queries": "^5.2.0",
+    "sass": "^1.89.2",
+    "stylelint": "^16.20.0"
   }
 }

@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readdir, copyFile, access } from 'node:fs/promises';
+import { logInfo, logWarn, logError } from './logger.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,28 +25,18 @@ async function copyDirRecursive(srcRoot, destRoot, label) {
       } else if (entry.isFile()) {
         await mkdir(path.dirname(destPath), { recursive: true });
         await copyFile(srcPath, destPath);
-        console.log(
-          `[assets] Копирован ${label}:`,
-          path.relative(rootDir, destPath),
-        );
+        logInfo(`[assets] Копирован ${label}: ` + path.relative(rootDir, destPath));
       }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
-      console.log(
-        `[assets] Папка для ${label} не найдена (${path.relative(
-          rootDir,
-          srcRoot,
-        )}), пропускаем`,
+      logWarn(
+        `[assets] Папка для ${label} не найдена (${path.relative(rootDir, srcRoot)}), пропускаем`,
       );
       return;
     }
-    console.error(
-      `[assets] Ошибка при копировании ${label} из "${path.relative(
-        rootDir,
-        srcRoot,
-      )}" в "${path.relative(rootDir, destRoot)}":`,
-      err,
+    logError(
+      `[assets] Ошибка при копировании ${label} из "${path.relative(rootDir, srcRoot)}" в "${path.relative(rootDir, destRoot)}": ${err.message}`,
     );
   }
 }
@@ -101,12 +92,8 @@ async function copyBlockImagesFlat() {
           const destPath = path.join(buildImgDir, entry.name); // плоско по имени файла
 
           await copyFile(srcPath, destPath);
-          console.log(
-            '[assets] Копирован изображение блока:',
-            `${blockName}/img/${entry.name} → ${path.relative(
-              rootDir,
-              destPath,
-            )}`,
+          logInfo(
+            `[assets] Копирован изображение блока: ${blockName}/img/${entry.name} → ${path.relative(rootDir, destPath)}`,
           );
         }
       } catch (err) {
@@ -114,23 +101,19 @@ async function copyBlockImagesFlat() {
           // У блока нет папки img — нормально, пропускаем
           continue;
         }
-        console.error(
-          `[assets] Ошибка при копировании изображений блока "${blockName}":`,
-          err,
+        logError(
+          `[assets] Ошибка при копировании изображений блока "${blockName}": ${err.message}`,
         );
       }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
-      console.log(
-        `[assets] Каталог блоков не найден (${path.relative(
-          rootDir,
-          blocksRoot,
-        )}), изображения блоков пропускаем`,
+      logWarn(
+        `[assets] Каталог блоков не найден (${path.relative(rootDir, blocksRoot)}), изображения блоков пропускаем`,
       );
       return;
     }
-    console.error('[assets] Ошибка при обходе блоков для img:', err);
+    logError('[assets] Ошибка при обходе блоков для img: ' + err.message);
   }
 }
 
@@ -164,12 +147,8 @@ async function copyBlockVideosFlat() {
           await mkdir(path.dirname(uniqueDestPath), { recursive: true });
           await copyFile(srcPath, uniqueDestPath);
 
-          console.log(
-            '[assets] Копирован видеофайл блока:',
-            `${blockName}/video/${entry.name} → ${path.relative(
-              rootDir,
-              uniqueDestPath,
-            )}`,
+          logInfo(
+            `[assets] Копирован видеофайл блока: ${blockName}/video/${entry.name} → ${path.relative(rootDir, uniqueDestPath)}`,
           );
         }
       } catch (err) {
@@ -177,28 +156,24 @@ async function copyBlockVideosFlat() {
           // У блока нет папки video — нормально, пропускаем
           continue;
         }
-        console.error(
-          `[assets] Ошибка при копировании видео блока "${blockName}":`,
-          err,
+        logError(
+          `[assets] Ошибка при копировании видео блока "${blockName}": ${err.message}`,
         );
       }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
-      console.log(
-        `[assets] Каталог блоков не найден (${path.relative(
-          rootDir,
-          blocksRoot,
-        )}), видео блоков пропускаем`,
+      logWarn(
+        `[assets] Каталог блоков не найден (${path.relative(rootDir, blocksRoot)}), видео блоков пропускаем`,
       );
       return;
     }
-    console.error('[assets] Ошибка при обходе блоков для видео:', err);
+    logError('[assets] Ошибка при обходе блоков для видео: ' + err.message);
   }
 }
 
 export async function copyAssets() {
-  console.log('[assets] Копирование ассетов (без оптимизации)');
+  logInfo('[assets] Копирование ассетов (без оптимизации)');
 
   const srcFonts = path.join(srcDir, 'fonts');
   const destFonts = path.join(buildDir, 'fonts');
@@ -224,7 +199,7 @@ export async function copyAssets() {
   // Видео блоков: src/blocks/*/video/* → build/video/<имя файла> (с уникальными именами)
   await copyBlockVideosFlat();
 
-  console.log('[assets] Копирование ассетов завершено');
+  logInfo('[assets] Копирование ассетов завершено');
 }
 
 // Автозапуск при прямом запуске файла
@@ -234,7 +209,7 @@ const isMainModule =
 
 if (isMainModule) {
   copyAssets().catch((err) => {
-    console.error('[assets] Ошибка копирования ассетов:', err);
+    logError('[assets] Ошибка копирования ассетов: ' + err.message);
     process.exitCode = 1;
   });
 }
