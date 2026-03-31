@@ -9,7 +9,6 @@
 @use '../blocks/page/page';
 @use '../blocks/test-block/test-block';
 @use '../blocks/test-block-2/test-block-2';
-@use '../blocks/test-block-3/test-block-3';
 
 // Подключения из addCssAfter:
 @use './print' as *;

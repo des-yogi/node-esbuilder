@@ -315,12 +315,6 @@ a[href^="tel:"] {
   border: 2px solid var(--border-color);
   cursor: pointer;
 }
-
-.test-block-2 {
-  min-height: 300px;
-  background: lime;
-}
-
 @media (min-width: 480px){
   .test-col {
     flex: 0 0 50%;
@@ -329,7 +323,6 @@ a[href^="tel:"] {
     padding-right: 12px;
   }
 }
-
 @media (min-width: 768px){
   .container {
     padding-left: 32px;
@@ -342,13 +335,11 @@ a[href^="tel:"] {
     padding-right: 12px;
   }
 }
-
 @media (width >= 768px){
   .test-block {
     background: hsl(0, 0%, 80%);
   }
 }
-
 @media (min-width: 992px){
   .test-col {
     flex: 0 0 25%;
@@ -357,20 +348,17 @@ a[href^="tel:"] {
     padding-right: 12px;
   }
 }
-
 @media (width >= 1200px){
   .test-block {
     background: greenyellow;
   }
 }
-
 @media (min-width: 1280px){
   .container {
     padding-left: calc(50% - 608px);
     padding-right: calc(50% - 608px);
   }
 }
-
 @media (prefers-reduced-motion: reduce){
   .fade {
     transition: none;
@@ -379,7 +367,6 @@ a[href^="tel:"] {
     transition: none;
   }
 }
-
 @media print{
   @page {
     margin: 1.5cm 1cm;

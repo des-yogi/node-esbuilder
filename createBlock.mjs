@@ -17,7 +17,7 @@ const projectConfig = JSON.parse(
 const dirs = projectConfig.dirs;
 
 const blockName = process.argv[2]; // получим имя блока
-const defaultExtensions = ['scss', 'html', 'js', 'img', 'bg-img']; // расширения по умолчанию
+const defaultExtensions = ['scss', 'html', 'img', 'bg-img']; // расширения по умолчанию
 const extensions = uniqueArray(
   defaultExtensions.concat(process.argv.slice(3)),
 ); // добавим введённые при вызове расширения (если есть)
@@ -62,6 +62,13 @@ if (blockName) {
         `// 1. Стилевые правила для этого селектора. 2. @media этого контекста.\n` +
         `// 3. Псевдоселекторы и псевдоэлементы. 4. Вложенные сторонние селекторы.\n` +
         `// 5. БЭМ-элементы. 6. БЭМ-модификаторы.\n\n` +
+        `// Раскомментируйте нужные подключения:\n` +
+        `// @use 'sass:math' as *;    // math.div(), math.round(), math.ceil(), math.floor(), math.percentage(), math.max(), math.min(), math.random()\n` +
+        `// @use 'sass:list' as *;    // list.append(), list.join(), list.nth(), list.length(), list.index(), list.separator()\n` +
+        `// @use 'sass:map' as *;     // map.get(), map.set(), map.merge(), map.keys(), map.values(), map.has-key(), map.remove()\n` +
+        `// @use 'sass:color' as *;   // color.adjust(), color.scale(), color.mix(), color.change(), color.complement(), color.invert()\n` +
+        `// @use 'sass:string' as *;  // string.index(), string.slice(), string.to-upper-case(), string.to-lower-case(), string.length(), string.insert()\n\n` +
+        `@use '../../scss/variables' as *;\n\n` +
         `.${blockName} {\n\n  $block-name: &; // #{$block-name}__element\n\n}\n`;
 
       // Добавляем блок в projectConfig, если его ещё нет

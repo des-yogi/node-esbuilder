@@ -86,8 +86,8 @@ $screen-xxl: 1800px;
 $container-sm: 100%;
 $container-md: 100%;
 $container-lg: 100%;
-$container-xl: $screen-xl - 20;
-$container-xxl: $screen-xxl - 20;
+$container-xl: calc($screen-xl - 20px);
+$container-xxl: calc($screen-xxl - 20px);
 
 
 // Модульная сетка

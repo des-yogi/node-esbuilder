@@ -4,13 +4,13 @@
   "description": "Современный сборщик проектов на Node, esbuild + БЭМ",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_ENV=production node scripts/build.mjs",
-    "dev": "node scripts/dev-server.mjs",
+    "build": "cross-env NODE_ENV=production FORCE_COLOR=2 node scripts/build.mjs",
+    "dev": "cross-env FORCE_COLOR=2 node scripts/dev-server.mjs",
     "start": "npm run dev",
-    "gen:style": "node scripts/generateStyle.mjs",
+    "gen:style": "cross-env FORCE_COLOR=2 node scripts/generateStyle.mjs",
     "lint:css": "stylelint \"src/**/*.scss\"",
     "lint:js": "eslint \"src/**/*.js\"",
-    "create-block": "node createBlock.mjs"
+    "create-block": "cross-env FORCE_COLOR=2 node createBlock.mjs"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
