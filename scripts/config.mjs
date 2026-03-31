@@ -26,22 +26,25 @@ export async function readProjectConfig() {
 
 /**
  * Возвращает объект со списками файлов.
- *
- * Формат (пока основное — css):
  * {
  *   css: {
- *     before: string[]; // пути файлов из addCssBefore
- *     blocks: string[]; // scss-файлы блоков src/blocks/<block>/<block>.scss
- *     after: string[];  // пути файлов из addCssAfter
- *     all: string[];    // before + blocks + after
+ *     before: string[];
+ *     blocks: string[];
+ *     after: string[];
+ *     all: string[];
  *   },
- *   js: { ... },        // заглушка под будущее
- *   img: string[],
- *   video: string[],
+ *   js: {
+ *     before: string[];
+ *     blocks: string[];
+ *     after: string[];
+ *     copied: string[];
+ *     all: string[];
+ *   },
  *   blocksDirs: string[],
  *   projectConfig: object,
  * }
  */
+
 export async function getFilesList() {
   const projectConfig = await readProjectConfig();
 

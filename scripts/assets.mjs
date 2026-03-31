@@ -1,69 +1,81 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mkdir, readdir, copyFile, access } from 'node:fs/promises';
+import { mkdir, readdir, copyFile, access, stat } from 'node:fs/promises';
 import { getFilesList } from './config.mjs';
 import { logInfo, logWarn, logError } from './logger.mjs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
+var rootDir = path.resolve(__dirname, '..');
 
-const srcDir = path.join(rootDir, 'src');
-const buildDir = path.join(rootDir, 'build');
+var srcDir = path.join(rootDir, 'src');
+var buildDir = path.join(rootDir, 'build');
 
 /**
  * Проверяет, разрешено ли расширение файла.
  * Если allowedExts = null или пустой массив — разрешено всё.
- *
- * @param {string} fileName — имя файла (например, "photo.jpg")
- * @param {string[]|null} allowedExts — ["jpg", "png", ...] или null
- * @returns {boolean}
  */
 function isExtAllowed(fileName, allowedExts) {
   if (!allowedExts || allowedExts.length === 0) return true;
-  const ext = path.extname(fileName).slice(1).toLowerCase();
-  return allowedExts.includes(ext);
+  var ext = path.extname(fileName).slice(1).toLowerCase();
+  return allowedExts.indexOf(ext) !== -1;
 }
 
 /**
- * Рекурсивно копирует srcRoot → destRoot (fonts, глобальные img/video).
- * Если передан allowedExts — копирует только файлы с перечисленными расширениями.
- *
- * @param {string} srcRoot
- * @param {string} destRoot
- * @param {string} label — для логов ("шрифт", "изображение", "видео")
- * @param {string[]|null} allowedExts — белый список расширений или null (всё)
+ * Проверяет, новее ли исходный файл, чем целевой.
+ * Если dest не существует — возвращает true (нужно копировать).
+ */
+async function isNewer(srcPath, destPath) {
+  try {
+    var srcStat = await stat(srcPath);
+    var destStat = await stat(destPath);
+    return srcStat.mtimeMs > destStat.mtimeMs;
+  } catch (err) {
+    if (err.code === 'ENOENT') return true;
+    throw err;
+  }
+}
+
+/**
+ * Рекурсивно копирует srcRoot → destRoot.
+ * - allowedExts — белый список расширений или null (всё)
+ * - Копирует только изменённые файлы (isNewer)
  */
 async function copyDirRecursive(srcRoot, destRoot, label, allowedExts) {
   try {
-    const entries = await readdir(srcRoot, { withFileTypes: true });
+    var entries = await readdir(srcRoot, { withFileTypes: true });
 
-    for (const entry of entries) {
-      const srcPath = path.join(srcRoot, entry.name);
-      const destPath = path.join(destRoot, entry.name);
+    for (var i = 0; i < entries.length; i++) {
+      var entry = entries[i];
+      var srcPath = path.join(srcRoot, entry.name);
+      var destPath = path.join(destRoot, entry.name);
 
       if (entry.isDirectory()) {
         await mkdir(destPath, { recursive: true });
         await copyDirRecursive(srcPath, destPath, label, allowedExts);
       } else if (entry.isFile()) {
         if (!isExtAllowed(entry.name, allowedExts)) {
-          logInfo(`[assets] Пропущен ${label} (расширение не в списке): ${entry.name}`);
+          logInfo('[assets] Пропущен ' + label + ' (расширение не в списке): ' + entry.name);
           continue;
+        }
+        if (!(await isNewer(srcPath, destPath))) {
+          continue; // файл не изменился — пропускаем
         }
         await mkdir(path.dirname(destPath), { recursive: true });
         await copyFile(srcPath, destPath);
-        logInfo(`[assets] Копирован ${label}: ` + path.relative(rootDir, destPath));
+        logInfo('[assets] Копирован ' + label + ': ' + path.relative(rootDir, destPath));
       }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
       logWarn(
-        `[assets] Папка для ${label} не найдена (${path.relative(rootDir, srcRoot)}), пропускаем`,
+        '[assets] Папка для ' + label + ' не найдена (' + path.relative(rootDir, srcRoot) + '), ��ропускаем'
       );
       return;
     }
     logError(
-      `[assets] Ошибка при копировании ${label} из "${path.relative(rootDir, srcRoot)}" в "${path.relative(rootDir, destRoot)}": ${err.message}`,
+      '[assets] Ошибка при копировании ' + label + ' из "' + path.relative(rootDir, srcRoot) +
+      '" в "' + path.relative(rootDir, destRoot) + '": ' + err.message
     );
   }
 }
@@ -71,22 +83,19 @@ async function copyDirRecursive(srcRoot, destRoot, label, allowedExts) {
 // Генерирует уникальный путь в каталоге destDir: если fileName занят,
 // то name.ext → name-1.ext, name-2.ext и т.д.
 async function getUniqueDestPath(destDir, fileName) {
-  const base = path.basename(fileName, path.extname(fileName));
-  const ext = path.extname(fileName);
+  var base = path.basename(fileName, path.extname(fileName));
+  var ext = path.extname(fileName);
 
-  let candidate = path.join(destDir, fileName);
-  let index = 1;
+  var candidate = path.join(destDir, fileName);
+  var index = 1;
 
-  // Проверяем, существует ли файл; если да — подбираем следующий индекс
   while (true) {
     try {
       await access(candidate);
-      // файл существует — формируем следующий вариант
-      candidate = path.join(destDir, `${base}-${index}${ext}`);
+      candidate = path.join(destDir, base + '-' + index + ext);
       index += 1;
     } catch (err) {
       if (err.code === 'ENOENT') {
-        // такого файла нет — можно использовать
         return candidate;
       }
       throw err;
@@ -95,58 +104,62 @@ async function getUniqueDestPath(destDir, fileName) {
 }
 
 /**
- * Копирует файлы из src/blocks/* /img/ в build/img по плоской схеме.
- * Фильтрует по allowedExts (если задан).
- *
- * @param {string[]|null} allowedExts
+ * Копирует файлы из src/blocks/*/img/ в build/img по плоской схеме.
+ * Фильтрует по allowedExts. Пропускает неизменённые.
  */
 async function copyBlockImagesFlat(allowedExts) {
-  const blocksRoot = path.join(srcDir, 'blocks');
-  const buildImgDir = path.join(buildDir, 'img');
+  var blocksRoot = path.join(srcDir, 'blocks');
+  var buildImgDir = path.join(buildDir, 'img');
 
   try {
-    const blockDirs = await readdir(blocksRoot, { withFileTypes: true });
+    var blockDirs = await readdir(blocksRoot, { withFileTypes: true });
     await mkdir(buildImgDir, { recursive: true });
 
-    for (const dirent of blockDirs) {
+    for (var d = 0; d < blockDirs.length; d++) {
+      var dirent = blockDirs[d];
       if (!dirent.isDirectory()) continue;
 
-      const blockName = dirent.name;
-      const blockImgDir = path.join(blocksRoot, blockName, 'img');
+      var blockName = dirent.name;
+      var blockImgDir = path.join(blocksRoot, blockName, 'img');
 
       try {
-        const entries = await readdir(blockImgDir, { withFileTypes: true });
+        var entries = await readdir(blockImgDir, { withFileTypes: true });
 
-        for (const entry of entries) {
+        for (var i = 0; i < entries.length; i++) {
+          var entry = entries[i];
           if (!entry.isFile()) continue;
 
           if (!isExtAllowed(entry.name, allowedExts)) {
-            logInfo(`[assets] Пропущен изображение блока (расширение не в списке): ${blockName}/img/${entry.name}`);
+            logInfo('[assets] Пропущен изображение блока (расширение не в списке): ' + blockName + '/img/' + entry.name);
             continue;
           }
 
-          const srcPath = path.join(blockImgDir, entry.name);
-          const destPath = path.join(buildImgDir, entry.name); // плоско по имени файла
+          var srcPath = path.join(blockImgDir, entry.name);
+          var destPath = path.join(buildImgDir, entry.name);
+
+          if (!(await isNewer(srcPath, destPath))) {
+            continue;
+          }
 
           await copyFile(srcPath, destPath);
           logInfo(
-            `[assets] Копирован изображение блока: ${blockName}/img/${entry.name} → ${path.relative(rootDir, destPath)}`,
+            '[assets] Копирован изображение блока: ' + blockName + '/img/' + entry.name +
+            ' → ' + path.relative(rootDir, destPath)
           );
         }
       } catch (err) {
         if (err.code === 'ENOENT') {
-          // У блока нет папки img — нормально, пропускаем
           continue;
         }
         logError(
-          `[assets] Ошибка при копировании изображений блока "${blockName}": ${err.message}`,
+          '[assets] Ошибка при копировании изображений блока "' + blockName + '": ' + err.message
         );
       }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
       logWarn(
-        `[assets] Каталог блоков не найден (${path.relative(rootDir, blocksRoot)}), изображения блоков пропускаем`,
+        '[assets] Каталог блоков не найден (' + path.relative(rootDir, blocksRoot) + '), изображения блоков пропускаем'
       );
       return;
     }
@@ -155,63 +168,66 @@ async function copyBlockImagesFlat(allowedExts) {
 }
 
 /**
- * Копирует файлы из src/blocks/* /video/ в build/video по плоской схеме
- * с уникализацией имён. Фильтрует по allowedExts (если задан).
- *
- * @param {string[]|null} allowedExts
+ * Копирует файлы из src/blocks/*/video/ в build/video по плоской схеме
+ * с уникализацией имён. Фильтрует по allowedExts. Пропускает неизменённые.
  */
 async function copyBlockVideosFlat(allowedExts) {
-  const blocksRoot = path.join(srcDir, 'blocks');
-  const buildVideoDir = path.join(buildDir, 'video');
+  var blocksRoot = path.join(srcDir, 'blocks');
+  var buildVideoDir = path.join(buildDir, 'video');
 
   try {
-    const blockDirs = await readdir(blocksRoot, { withFileTypes: true });
+    var blockDirs = await readdir(blocksRoot, { withFileTypes: true });
     await mkdir(buildVideoDir, { recursive: true });
 
-    for (const dirent of blockDirs) {
+    for (var d = 0; d < blockDirs.length; d++) {
+      var dirent = blockDirs[d];
       if (!dirent.isDirectory()) continue;
 
-      const blockName = dirent.name;
-      const blockVideoDir = path.join(blocksRoot, blockName, 'video');
+      var blockName = dirent.name;
+      var blockVideoDir = path.join(blocksRoot, blockName, 'video');
 
       try {
-        const entries = await readdir(blockVideoDir, { withFileTypes: true });
+        var entries = await readdir(blockVideoDir, { withFileTypes: true });
 
-        for (const entry of entries) {
+        for (var i = 0; i < entries.length; i++) {
+          var entry = entries[i];
           if (!entry.isFile()) continue;
 
           if (!isExtAllowed(entry.name, allowedExts)) {
-            logInfo(`[assets] Пропущен видео блока (расширение не в списке): ${blockName}/video/${entry.name}`);
+            logInfo('[assets] Пропущен видео блока (расширение не в списке): ' + blockName + '/video/' + entry.name);
             continue;
           }
 
-          const srcPath = path.join(blockVideoDir, entry.name);
-          const uniqueDestPath = await getUniqueDestPath(
-            buildVideoDir,
-            entry.name,
-          );
+          var srcPath = path.join(blockVideoDir, entry.name);
+          var uniqueDestPath = await getUniqueDestPath(buildVideoDir, entry.name);
+
+          // Для видео блоков isNewer проверяем по оригинальному имени
+          var directDest = path.join(buildVideoDir, entry.name);
+          if (!(await isNewer(srcPath, directDest))) {
+            continue;
+          }
 
           await mkdir(path.dirname(uniqueDestPath), { recursive: true });
           await copyFile(srcPath, uniqueDestPath);
 
           logInfo(
-            `[assets] Копирован видеофайл блока: ${blockName}/video/${entry.name} → ${path.relative(rootDir, uniqueDestPath)}`,
+            '[assets] Копирован видеофайл блока: ' + blockName + '/video/' + entry.name +
+            ' → ' + path.relative(rootDir, uniqueDestPath)
           );
         }
       } catch (err) {
         if (err.code === 'ENOENT') {
-          // У блока нет папки video — нормально, пропускаем
           continue;
         }
         logError(
-          `[assets] Ошибка при копировании видео блока "${blockName}": ${err.message}`,
+          '[assets] Ошибка при копировании видео блока "' + blockName + '": ' + err.message
         );
       }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {
       logWarn(
-        `[assets] Каталог блоков не найден (${path.relative(rootDir, blocksRoot)}), видео блоков пропускаем`,
+        '[assets] Каталог блоков не найден (' + path.relative(rootDir, blocksRoot) + '), видео блоков пропускаем'
       );
       return;
     }
@@ -223,24 +239,25 @@ export async function copyAssets() {
   logInfo('[assets] Копирование ассетов (без оптимизации)');
 
   // Читаем белые списки расширений из projectConfig
-  const { projectConfig } = await getFilesList();
-  const imgExts = Array.isArray(projectConfig.allowedImageExtensions)
+  var filesList = await getFilesList();
+  var projectConfig = filesList.projectConfig;
+  var imgExts = Array.isArray(projectConfig.allowedImageExtensions)
     ? projectConfig.allowedImageExtensions
-    : null; // null = копировать всё (обратная совместимость)
-  const videoExts = Array.isArray(projectConfig.allowedVideoExtensions)
+    : null;
+  var videoExts = Array.isArray(projectConfig.allowedVideoExtensions)
     ? projectConfig.allowedVideoExtensions
     : null;
 
-  const srcFonts = path.join(srcDir, 'fonts');
-  const destFonts = path.join(buildDir, 'fonts');
+  var srcFonts = path.join(srcDir, 'fonts');
+  var destFonts = path.join(buildDir, 'fonts');
 
-  const srcImg = path.join(srcDir, 'img');
-  const destImg = path.join(buildDir, 'img');
+  var srcImg = path.join(srcDir, 'img');
+  var destImg = path.join(buildDir, 'img');
 
-  const srcVideo = path.join(srcDir, 'video');
-  const destVideo = path.join(buildDir, 'video');
+  var srcVideo = path.join(srcDir, 'video');
+  var destVideo = path.join(buildDir, 'video');
 
-  // Шрифты: src/fonts/** → build/fonts/** (без фильтра — мусора в шрифтах не бывает)
+  // Шрифты: src/fonts/** → build/fonts/** (без фильтра расширений)
   await copyDirRecursive(srcFonts, destFonts, 'шрифт', null);
 
   // Глобальные картинки: src/img/** → build/img/** (с фильтром)
@@ -259,13 +276,13 @@ export async function copyAssets() {
 }
 
 // Автозапуск при прямом запуске файла
-const isMainModule =
+var isMainModule =
   process.argv[1] &&
   path.resolve(process.argv[1]) === path.resolve(__filename);
 
 if (isMainModule) {
-  copyAssets().catch((err) => {
-    logError('[assets] Ошибка копирования ассето��: ' + err.message);
+  copyAssets().catch(function (err) {
+    logError('[assets] Ошибка копирования ассетов: ' + err.message);
     process.exitCode = 1;
   });
 }

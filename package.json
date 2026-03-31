@@ -10,7 +10,8 @@
     "gen:style": "cross-env FORCE_COLOR=2 node scripts/generateStyle.mjs",
     "lint:css": "stylelint \"src/**/*.scss\"",
     "lint:js": "eslint \"src/**/*.js\"",
-    "create-block": "cross-env FORCE_COLOR=2 node createBlock.mjs"
+    "create-block": "cross-env FORCE_COLOR=2 node createBlock.mjs",
+    "img:opt": "cross-env FORCE_COLOR=2 node scripts/img-opt.mjs"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
@@ -25,6 +26,7 @@
     "postcss-inline-svg": "^6.0.0",
     "postcss-sort-media-queries": "^5.2.0",
     "sass": "^1.89.2",
+    "sharp": "^0.34.5",
     "stylelint": "^16.20.0"
   }
 }
