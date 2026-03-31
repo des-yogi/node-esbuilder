@@ -1,7 +1,7 @@
 {
   "name": "node-bem-starter",
   "version": "0.1.0",
-  "description": "Многофункциональный сборщик проектов на Node, esbuild + БЭМ",
+  "description": "Современный сборщик проектов на Node, esbuild + БЭМ",
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_ENV=production node scripts/build.mjs",

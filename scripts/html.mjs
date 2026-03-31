@@ -56,8 +56,25 @@ function applyVariables(content, context) {
   }
 
   return content.replace(VAR_RE, (match, pathExpr) => {
-    const v = resolveVar(pathExpr, context);
-    return v != null ? String(v) : '';
+    // Сначала пробуем полный путь (для случаев вида @@user.name)
+    const fullValue = resolveVar(pathExpr, context);
+    if (fullValue !== '') {
+      return String(fullValue);
+    }
+
+    // Если полный путь не найден — пробуем укороченные варианты
+    // (для случаев вида @@img.jpg, где .jpg — расширение файла, а не свойство)
+    const parts = pathExpr.split('.');
+    for (let i = parts.length - 1; i >= 1; i--) {
+      const shortPath = parts.slice(0, i).join('.');
+      const shortValue = resolveVar(shortPath, context);
+      if (shortValue !== '') {
+        const remainder = '.' + parts.slice(i).join('.');
+        return String(shortValue) + remainder;
+      }
+    }
+
+    return '';
   });
 }
 
@@ -95,9 +112,11 @@ async function processHtmlFile(relPath, context = {}, stack = new Set()) {
     );
   }
 
-  // Сначала разворачиваем include'ы, затем подставляем переменные.
+  // Сначала удаляем DEV-комментарии, чтобы не обрабатывать @@include внутри них
+  const withoutDev = content.replace(DEV_COMMENT_RE, '');
+
   const withIncludes = await expandIncludes(
-    content,
+    withoutDev,
     path.dirname(normalized),
     context,
     stack,

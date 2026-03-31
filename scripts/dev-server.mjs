@@ -44,17 +44,28 @@ export async function devServer() {
   // Нормализуем путь к файлу для кроссплатформенного сравнения (Windows backslash → slash)
   const normPath = (p) => p.replace(/\\/g, '/');
 
-  // Вотчер для projectConfig.json — полная пересборка при изменении
+  // Защита от параллельных запусков
+  let isRebuilding = false;
+
+  // Вотчер для projectConfig.json
   const configWatcher = chokidar.watch(projectConfigPath, {
     ignoreInitial: true,
   });
 
   configWatcher.on('change', async () => {
-    logInfo('[dev-server] projectConfig.json изменён — полная пересборка');
+    if (isRebuilding) return;
+    isRebuilding = true;
+    logInfo('[dev-server] projectConfig.json изменён — пересборка (без clean)');
     try {
-      await build({ mode: 'development' });
+      await generateStyleEntry();
+      await buildStyles({ mode: 'development' });
+      await buildScripts({ mode: 'development' });
+      await copyAssets();
+      await buildHtml();
     } catch (err) {
-      logError('[dev-server] Ошибка пересборки после изменения projectConfig.json: ' + err.message);
+      logError('[dev-server] Ошибка пересборки: ' + err.message);
+    } finally {
+      isRebuilding = false;
     }
   });
 
@@ -64,13 +75,17 @@ export async function devServer() {
   });
 
   watcher.on('all', async (event, filePath) => {
+    if (isRebuilding) return;
+    isRebuilding = true;
+
     const rel = normPath(path.relative(srcDir, filePath));
     logInfo(`[dev-server] Изменение: ${event} ${rel}`);
 
     try {
       if (rel.endsWith('.scss')) {
-        // При изменении SCSS — сначала регенерируем style.scss, потом компилируем
-        await generateStyleEntry();
+        if (rel !== 'scss/style.scss') {
+          await generateStyleEntry();
+        }
         await buildStyles({ mode: 'development' });
       } else if (rel.endsWith('.js')) {
         await buildScripts({ mode: 'development' });
@@ -84,10 +99,16 @@ export async function devServer() {
       ) {
         await copyAssets();
       } else {
-        await build({ mode: 'development' });
+        await generateStyleEntry();
+        await buildStyles({ mode: 'development' });
+        await buildScripts({ mode: 'development' });
+        await copyAssets();
+        await buildHtml();
       }
     } catch (err) {
-      logError('[dev-server] Ошибка при обработке изменения: ' + err.message);
+      logError('[dev-server] Ошибка: ' + err.message);
+    } finally {
+      isRebuilding = false;
     }
   });
 }

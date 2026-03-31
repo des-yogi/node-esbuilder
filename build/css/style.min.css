@@ -293,6 +293,34 @@ a[href^="tel:"] {
   padding-right: 12px;
 }
 
+.test-block {
+  color: var(--text-color);
+  background: var(--bg-color);
+}
+.test-block__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  min-width: 150px;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #f00;
+  background-color: paleturquoise;
+  background-position: center left 10px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8.36' height='14.73' viewBox='0 0 8.36 14.73' fill='%237391EA' stroke='rgba(255, 255, 255, 0)'%3E%3Cpath d='M2.41 7.36l5.66-5.65A1 1 0 0 0 6.66.29L.29 6.66a1 1 0 0 0 0 1.41l6.36 6.36A1 1 0 0 0 8.07 13z'/%3E%3C/svg%3E");
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+}
+
+.test-block-2 {
+  min-height: 300px;
+  background: lime;
+}
+
 @media (min-width: 480px){
   .test-col {
     flex: 0 0 50%;
@@ -315,12 +343,24 @@ a[href^="tel:"] {
   }
 }
 
+@media (width >= 768px){
+  .test-block {
+    background: hsl(0, 0%, 80%);
+  }
+}
+
 @media (min-width: 992px){
   .test-col {
     flex: 0 0 25%;
     max-width: 25%;
     padding-left: 12px;
     padding-right: 12px;
+  }
+}
+
+@media (width >= 1200px){
+  .test-block {
+    background: greenyellow;
   }
 }
 

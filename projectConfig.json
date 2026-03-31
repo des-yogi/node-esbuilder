@@ -5,7 +5,10 @@
     "blocksDirName": "blocks"
   },
   "blocks": {
-    "page": []
+    "page": [],
+    "test-block": [],
+    "test-block-2": [],
+    "test-block-3": []
   },
   "addCssBefore": [
     "src/scss/variables.scss",

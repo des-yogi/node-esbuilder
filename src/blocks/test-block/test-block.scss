@@ -7,11 +7,11 @@
   background: var(--bg-color);
 
   @media (width >= 768px) {
-    background: blue;
+    background: $gray-lighter;
   }
 
   @media (width >= 1200px) {
-    background: darkgoldenrod;
+    background: greenyellow;
   }
 
   &__btn {
