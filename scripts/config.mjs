@@ -68,6 +68,20 @@ export async function getFilesList() {
 
   const cssAll = [...addCssBefore, ...blockScssFiles, ...addCssAfter];
 
+  const addJsBefore = Array.isArray(projectConfig.addJsBefore)
+    ? projectConfig.addJsBefore.map(String)
+    : [];
+
+  const addJsAfter = Array.isArray(projectConfig.addJsAfter)
+    ? projectConfig.addJsAfter.map(String)
+    : [];
+
+  const blockJsFiles = blockNames.map(
+    (blockName) => `${blocksRoot}/${blockName}/${blockName}.js`,
+  );
+
+  const jsAll = [...addJsBefore, ...blockJsFiles, ...addJsAfter];
+
   return {
     css: {
       before: addCssBefore,
@@ -76,11 +90,11 @@ export async function getFilesList() {
       all: cssAll,
     },
     js: {
-      before: projectConfig.addJsBefore ?? [],
-      blocks: [],
-      after: projectConfig.addJsAfter ?? [],
+      before: addJsBefore,
+      blocks: blockJsFiles,
+      after: addJsAfter,
       copied: projectConfig.copiedJs ?? [],
-      all: [],
+      all: jsAll,
     },
     img: projectConfig.addImages ?? [],
     video: projectConfig.addVideo ?? [],

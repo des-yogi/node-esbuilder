@@ -7,10 +7,11 @@ import { copyAssets } from './assets.mjs';
 import { buildHtml } from './html.mjs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { logInfo, logError } from './logger.mjs';
 
 /**
  * Оркестратор сборки.
- * Последовательность (пока без параллелизма, для простоты отладки):
+ * Последовательность:
  * 1) clean
  * 2) generateStyle
  * 3) sprite-svg
@@ -24,23 +25,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function build({ mode = 'development' } = {}) {
-  console.log('[build] ВХОД в функцию build (debug)');
-  console.log(`[build] Старт полной сборки в режиме "${mode}"`);
+  logInfo(`[build] Старт полной сборки в режиме "${mode}"`);
 
   await cleanBuild();
   await generateStyleEntry();
-  await buildSvgSprite();
   await buildStyles({ mode });
   await buildScripts({ mode });
   await copyAssets();
+  await buildSvgSprite();  // после copyAssets, чтобы не перезаписать свежий спрайт
   await buildHtml();
 
-  console.log('[build] ВЫХОД из функции build (debug)');
-  console.log('[build] Сборка завершена');
+  logInfo('[build] Сборка завершена');
 }
 
 // Позволяем запускать модуль напрямую: `node scripts/build.mjs`
-// Используем надёжную проверку, совместимую с Windows и POSIX
 const isMainModule =
   process.argv[1] &&
   path.resolve(process.argv[1]) === path.resolve(__filename);
@@ -48,7 +46,7 @@ const isMainModule =
 if (isMainModule) {
   const mode = process.env.NODE_ENV || 'development';
   build({ mode }).catch((err) => {
-    console.error('[build] Ошибка сборки:', err);
+    logError('[build] Ошибка сборки: ' + err.message);
     process.exitCode = 1;
   });
 }
