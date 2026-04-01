@@ -103,10 +103,10 @@ async function getUniqueDestPath(destDir, fileName) {
   }
 }
 
-/**
- * Копирует файлы из src/blocks/*/img/ в build/img по плоской схеме.
- * Фильтрует по allowedExts. Пропускает неизменённые.
- */
+
+// Копирует файлы из src/blocks/*/img/ в build/img по плоской схеме.
+// Фильтрует по allowedExts. Пропускает неизменённые.
+
 async function copyBlockImagesFlat(allowedExts) {
   var blocksRoot = path.join(srcDir, 'blocks');
   var buildImgDir = path.join(buildDir, 'img');
@@ -167,10 +167,10 @@ async function copyBlockImagesFlat(allowedExts) {
   }
 }
 
-/**
- * Копирует файлы из src/blocks/*/video/ в build/video по плоской схеме
- * с уникализацией имён. Фильтрует по allowedExts. Пропускает неизменённые.
- */
+
+// Копирует файлы из src/blocks/*/video/ в build/video по плоской схеме
+// с уникализацией имён. Фильтрует по allowedExts. Пропускает неизменённые.
+
 async function copyBlockVideosFlat(allowedExts) {
   var blocksRoot = path.join(srcDir, 'blocks');
   var buildVideoDir = path.join(buildDir, 'video');
