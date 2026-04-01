@@ -6,31 +6,33 @@
   },
   "blocks": {
     "page": [],
-    "test-block": [],
-    "test-block-2": []
+    "test-block": []
   },
   "addCssBefore": [
+    "../../node_modules/bootstrap/scss/_functions",
+    "../../node_modules/bootstrap/scss/_variables",
+    "../../node_modules/bootstrap/scss/_mixins",
+    "../../node_modules/bootstrap/scss/_modal",
     "src/scss/variables.scss",
     "src/scss/mixins.scss"
   ],
   "addCssAfter": [
     "src/scss/print.scss"
   ],
-  "addJsBefore": [],
+  "addJsBefore": [
+    "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+    "./node_modules/autosize/dist/autosize.min.js"
+  ],
   "addJsAfter": [],
-  "copiedJs": [
-    "src/js/libs/bootstrap.bundle.min.js"
-  ],
-  "copiedCss": [
-    "src/css/bootstrap.min.css"
-  ],
+  "copiedJs": [],
+  "copiedCss": [],
+  "singleCompiled": [],
   "allowedImageExtensions": [
     "jpg", "jpeg", "png", "gif", "svg", "ico", "webp", "avif"
   ],
   "allowedVideoExtensions": [
     "mp4", "webm", "ogv"
   ],
-  "singleCompiled": [],
   "lintCss": true,
   "lintJs": false
 }

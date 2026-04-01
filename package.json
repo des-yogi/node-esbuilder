@@ -1,7 +1,13 @@
 {
   "name": "node-bem-starter",
   "version": "0.1.0",
-  "description": "Современный сборщик проектов на Node, esbuild + БЭМ",
+  "description": "A modern Node.js project builder: esbuild & BEM notation",
+  "author": "Igor Beliakovski",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/des-yogi/node-esbuilder"
+  },
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_ENV=production FORCE_COLOR=2 node scripts/build.mjs",
@@ -13,6 +19,11 @@
     "create-block": "cross-env FORCE_COLOR=2 node createBlock.mjs",
     "img:opt": "cross-env FORCE_COLOR=2 node scripts/img-opt.mjs"
   },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "browser-sync": "^3.0.4",
@@ -28,5 +39,9 @@
     "sass": "^1.89.2",
     "sharp": "^0.34.5",
     "stylelint": "^16.20.0"
+  },
+  "dependencies": {
+    "autosize": "^6.0.1",
+    "bootstrap": "^5.3.8"
   }
 }

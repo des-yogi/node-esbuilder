@@ -57,6 +57,7 @@ const tagColors = {
   '[html]':          chalk.bold.hex('#0000FF'),
   '[dev-server]':    chalk.bold.hex('#F8F8F2'),
   '[createBlock]':   chalk.bold.hex('#9457EB'),
+  '[img-opt]':       chalk.bold.magentaBright,
 };
 
 const defaultTagStyle = chalk.bold.hex('#FFFFFF');

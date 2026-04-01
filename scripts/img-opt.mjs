@@ -36,7 +36,7 @@ const QUALITY = {
   jpeg: 75,
   png: 75,
   webp: 75,
-  avif: 65,
+  avif: 60,
 };
 
 // Расширения, которые можно оптимизировать и конвертировать
@@ -114,7 +114,7 @@ async function processDir(srcDir, destDir) {
     entries = await readdir(srcDir, { withFileTypes: true });
   } catch (err) {
     if (err.code === 'ENOENT') {
-      logError('[img-opt] Папка н�� найдена: ' + srcDir);
+      logError('[img-opt] Папка не найдена: ' + srcDir);
       return totals;
     }
     throw err;

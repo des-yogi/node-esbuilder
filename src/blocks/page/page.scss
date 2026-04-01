@@ -220,39 +220,15 @@ a {
   // }
 
   // На больших экранах телефоны-ссылки делаем обычным текстом (если надо)
-  &[href^="tel:"] {
+  //&[href^="tel:"] {
     /* @media (min-width: $screen-xl) {
       white-space: nowrap;
       pointer-events: none;
       text-decoration: inherit;
       color: inherit;
     } */
-  }
+  //}
 }
-
-// BS4 Хелперы для BS4 табов и т.п.
-
-/* .fade {
-  transition: opacity 0.15s linear;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fade {
-    transition: none;
-  }
-}
-
-.fade:not(.show) {
-  opacity: 0;
-}
-
-.collapse {
-  transition: all 0.3s ease-out;
-}
-
-.collapse:not(.show) {
-  display: none;
-} */
 
 .fade {
   @include transition($transition-fade);
@@ -275,7 +251,6 @@ a {
 
   @include transition($transition-collapse);
 }
-
 
 .visually-hidden {
   position: absolute;
@@ -320,6 +295,7 @@ a {
 /*
   This will hide the focus indicator if the element receives focus via the mouse,
   but it will still show up on keyboard focus.
+  N.B. Полифилл устарел, так как с 2022 года полноценно работает нативный ":focus-visible". Рекомендуется к удалению.
 */
 
 .js-focus-visible :focus:not(.focus-visible) {
@@ -342,7 +318,6 @@ a {
     $padding-min: 32px; // нужный отступ от краев экрана
     // padding: 1em calc(50% - 600px); //600px - это $screen-xl / 2 - нужный отступ от края экрана
     $half-screen-xl: math.div($screen-xl, 2) - $padding-min;
-
     padding-left: calc(50% - #{$half-screen-xl});
     padding-right: calc(50% - #{$half-screen-xl});
   }
