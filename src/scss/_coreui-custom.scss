@@ -3,9 +3,11 @@
 // Базовые зависимости (обязательно)
 @use '@coreui/coreui/scss/functions' as *;
 @use '@coreui/coreui/scss/variables' as *;
+
 // @use '@coreui/coreui/scss/variables-dark' as *;
 @use '@coreui/coreui/scss/maps' as *; // для использования карт цветов (color maps) от CoreUI, например, для генерации оттенков цвета (color shades) в миксинах
 @use '@coreui/coreui/scss/mixins' as *; // для использования карт цветов (color maps) от CoreUI, например, для генерации оттенков цвета (color shades) в миксинах
+
 // @use '@coreui/coreui/scss/utilities' as *; // для использования утилит от CoreUI, например, для генерации классов утилит (utility classes) в миксинах
 
 // CSS-переменные --cui-* (обязательно для использования стилей компонентов)
@@ -14,7 +16,7 @@
 // @use '@coreui/coreui/scss/reboot'; (необязательно, если не нужны базовые стили для HTML-элементов от CoreUI)
 
 // Только нужные компоненты (Layout & components):
-//
+
 // @use '@coreui/coreui/scss/type';
 // @use '@coreui/coreui/scss/images';
 // @use '@coreui/coreui/scss/containers';
@@ -45,8 +47,8 @@
 // @use '@coreui/coreui/scss/offcanvas';
 // @use '@coreui/coreui/scss/placeholders';
 
-// новые, в дополнение к Bootstrap 5
-//
+// Новые, в дополнение к Bootstrap 5
+
 // @use '@coreui/coreui/scss/chip';
 // @use '@coreui/coreui/scss/avatar';
 // @use '@coreui/coreui/scss/callout';
@@ -56,6 +58,6 @@
 // @use '@coreui/coreui/scss/sidebar';
 
 // Helpers & Utilities (необязательно, если не нужны миксины и утилиты от CoreUI)
-//
+
 // @use '@coreui/coreui/scss/helpers'; // для использования миксинов от CoreUI, например, для генерации классов утилит (utility classes) в миксинах
 // @use '@coreui/coreui/scss/utilities/api'; // для использования утилит от CoreUI, например, для использования классов маргинов, паддингов и т.п.

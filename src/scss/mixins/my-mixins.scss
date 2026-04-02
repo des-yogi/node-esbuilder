@@ -34,8 +34,8 @@
 
 @mixin img-sharp {
   image-rendering: pixelated;
-   image-rendering: -moz-crisp-edges; /* Firefox */
-   -ms-interpolation-mode: nearest-neighbor; /* IE */
+  image-rendering: crisp-edges; /* Firefox */
+  -ms-interpolation-mode: nearest-neighbor; /* IE */
 }
 
 // stylelint-disable property-blacklist

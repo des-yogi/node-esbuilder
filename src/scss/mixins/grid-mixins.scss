@@ -8,21 +8,19 @@ $screen-md: 768px !default;
 $screen-lg: 992px !default;
 $screen-xl: 1280px !default;
 $screen-xxl: 1800px !default;
-
 $container-sm: 100% !default;
 $container-md: 100% !default;
 $container-lg: math.sub($screen-lg, 20) !default;
 $container-xl: math.sub($screen-xl, 20) !default;
 $container-xxl: math.sub($screen-xxl, 20) !default;
-
 $grid-columns: 12 !default;
 $grid-gutter-width: 20px !default;
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //  Генератор правил для контейнера
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-@mixin container (
+@mixin container(
   $xs-grid-gutter:  $grid-gutter-width,
   $sm-grid-gutter:  $grid-gutter-width,
   $md-grid-gutter:  $grid-gutter-width,
@@ -35,7 +33,7 @@ $grid-gutter-width: 20px !default;
   margin-left: auto;
   margin-right: auto;
 
-  @if ($xs-grid-gutter != 0) {
+  @if $xs-grid-gutter != 0 {
     padding-left: math.div($xs-grid-gutter, 2);
     padding-right: math.div($xs-grid-gutter, 2);
   }
@@ -43,7 +41,7 @@ $grid-gutter-width: 20px !default;
   @media (min-width: $screen-sm) {
     width: $container-sm;
 
-    @if ($sm-grid-gutter != $xs-grid-gutter) {
+    @if $sm-grid-gutter != $xs-grid-gutter {
       padding-left: math.div($sm-grid-gutter, 2);
       padding-right: math.div($sm-grid-gutter, 2);
     }
@@ -52,7 +50,7 @@ $grid-gutter-width: 20px !default;
   @media (min-width: $screen-md) {
     width: $container-md;
 
-    @if ($md-grid-gutter != $sm-grid-gutter) {
+    @if $md-grid-gutter != $sm-grid-gutter {
       padding-left: math.div($md-grid-gutter, 2);
       padding-right: math.div($md-grid-gutter, 2);
     }
@@ -61,7 +59,7 @@ $grid-gutter-width: 20px !default;
   @media (min-width: $screen-lg) {
     width: $container-lg;
 
-    @if ($lg-grid-gutter != $md-grid-gutter) {
+    @if $lg-grid-gutter != $md-grid-gutter {
       padding-left: math.div($lg-grid-gutter, 2);
       padding-right: math.div($lg-grid-gutter, 2);
     }
@@ -70,7 +68,7 @@ $grid-gutter-width: 20px !default;
   @media (min-width: $screen-xl) {
     width: $container-xl;
 
-    @if ($xl-grid-gutter != $lg-grid-gutter) {
+    @if $xl-grid-gutter != $lg-grid-gutter {
       padding-left: math.div($xl-grid-gutter, 2);
       padding-right: math.div($xl-grid-gutter, 2);
     }
@@ -79,18 +77,18 @@ $grid-gutter-width: 20px !default;
   @media (min-width: $screen-xxl) {
     width: $container-xxl;
 
-    @if ($xxl-grid-gutter != $xl-grid-gutter) {
+    @if $xxl-grid-gutter != $xl-grid-gutter {
       padding-left: math.div($xxl-grid-gutter, 2);
       padding-right: math.div($xxl-grid-gutter, 2);
     }
   }
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //  Генератор правил для прямого родителя модульной сетки
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-@mixin row (
+@mixin row(
   $xs-grid-gutter:  $grid-gutter-width,
   $sm-grid-gutter:  $grid-gutter-width,
   $md-grid-gutter:  $grid-gutter-width,
@@ -102,40 +100,40 @@ $grid-gutter-width: 20px !default;
   flex-wrap: wrap;
 
   // Все маргины должны идти до вложенных правил!
-  @if ($xs-grid-gutter != 0) {
+  @if $xs-grid-gutter != 0 {
     margin-left: math.div($xs-grid-gutter, 2) * -1;
     margin-right: math.div($xs-grid-gutter, 2) * -1;
   }
 
-  @if ($sm-grid-gutter != $xs-grid-gutter) {
+  @if $sm-grid-gutter != $xs-grid-gutter {
     @media (min-width: $screen-sm) {
       margin-left: math.div($sm-grid-gutter, 2) * -1;
       margin-right: math.div($sm-grid-gutter, 2) * -1;
     }
   }
 
-  @if ($md-grid-gutter != $sm-grid-gutter) {
+  @if $md-grid-gutter != $sm-grid-gutter {
     @media (min-width: $screen-md) {
       margin-left: math.div($md-grid-gutter, 2) * -1;
       margin-right: math.div($md-grid-gutter, 2) * -1;
     }
   }
 
-  @if ($lg-grid-gutter != $md-grid-gutter) {
+  @if $lg-grid-gutter != $md-grid-gutter {
     @media (min-width: $screen-lg) {
       margin-left: math.div($lg-grid-gutter, 2) * -1;
       margin-right: math.div($lg-grid-gutter, 2) * -1;
     }
   }
 
-  @if ($xl-grid-gutter != $lg-grid-gutter) {
+  @if $xl-grid-gutter != $lg-grid-gutter {
     @media (min-width: $screen-xl) {
       margin-left: math.div($xl-grid-gutter, 2) * -1;
       margin-right: math.div($xl-grid-gutter, 2) * -1;
     }
   }
 
-  @if ($xxl-grid-gutter != $xl-grid-gutter) {
+  @if $xxl-grid-gutter != $xl-grid-gutter {
     @media (min-width: $screen-xxl) {
       margin-left: math.div($xxl-grid-gutter, 2) * -1;
       margin-right: math.div($xxl-grid-gutter, 2) * -1;
@@ -148,116 +146,117 @@ $grid-gutter-width: 20px !default;
   }
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //  Генератор ширины ячейки
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-@mixin get-width ($column: 1, $columns: $grid-columns) {
+@mixin get-width($column: 1, $columns: $grid-columns) {
   $width: math.div(100%, $columns) * $column;
+
   flex: 0 0 $width;
   max-width: $width;
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //  Генератор правил для одной ячейки
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-@mixin make-col (
+@mixin make-col(
   $column:  1,
   $columns: $grid-columns,
   $gutter:  $grid-gutter-width
 ) {
   @include get-width($column, $columns);
 
-  @if ($gutter != false) {
+  @if $gutter != false {
     padding-left: math.div($gutter, 2);
     padding-right: math.div($gutter, 2);
   }
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //  Генератор правил для одной ячейки с возможностью указать @media
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-@mixin col (
+@mixin col(
   $screen:  xs,
   $column:  $grid-columns,
   $columns: $grid-columns,
   $gutter:  $grid-gutter-width
 ) {
-  @if ($screen == xs) {
+  @if $screen == xs {
     @include make-col($column, $columns, $gutter);
   }
 
-  @if ($screen == sm) {
+  @if $screen == sm {
     @media (min-width: $screen-sm) {
       @include make-col($column, $columns, $gutter);
     }
   }
 
-  @if ($screen == md) {
+  @if $screen == md {
     @media (min-width: $screen-md) {
       @include make-col($column, $columns, $gutter);
     }
   }
 
-  @if ($screen == lg) {
+  @if $screen == lg {
     @media (min-width: $screen-lg) {
       @include make-col($column, $columns, $gutter);
     }
   }
 
-  @if ($screen == xl) {
+  @if $screen == xl {
     @media (min-width: $screen-xl) {
       @include make-col($column, $columns, $gutter);
     }
   }
 
-  @if ($screen == xxl) {
+  @if $screen == xxl {
     @media (min-width: $screen-xxl) {
       @include make-col($column, $columns, $gutter);
     }
   }
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //  Генератор правил для отступа одной ячейки с возможностью указать @media
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-@mixin col-offset (
+@mixin col-offset(
   $screen: xs,
   $column: 1,
   $columns: $grid-columns
 ) {
-  @if ($screen == xs) {
+  @if $screen == xs {
     margin-left: math.div($column * 100%, $columns);
   }
 
-  @if ($screen == sm) {
+  @if $screen == sm {
     @media (min-width: $screen-sm) {
       margin-left: math.div($column * 100%, $columns);
     }
   }
 
-  @if ($screen == md) {
+  @if $screen == md {
     @media (min-width: $screen-md) {
       margin-left: math.div($column * 100%, $columns);
     }
   }
 
-  @if ($screen == lg) {
+  @if $screen == lg {
     @media (min-width: $screen-lg) {
       margin-left: math.div($column * 100%, $columns);
     }
   }
 
-  @if ($screen == xl) {
+  @if $screen == xl {
     @media (min-width: $screen-xl) {
       margin-left: math.div($column * 100%, $columns);
     }
   }
 
-  @if ($screen == xxl) {
+  @if $screen == xxl {
     @media (min-width: $screen-xxl) {
       margin-left: math.div($column * 100%, $columns);
     }

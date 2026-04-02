@@ -1,10 +1,4 @@
-/*
-  Форма: работа стилизованного input[type="file"]
-  Автор: Osvaldas Valutis, www.osvaldas.info (адаптировано под используемую разметку)
-  Available for use under the MIT License
-*/
-
-;( function ()
+(function ()
 {
   function closest(el, selector) {
     var matchesFn;
@@ -32,22 +26,18 @@
     return null;
   }
 
-  var inputs = document.querySelectorAll( '.field-file__input' );
-  Array.prototype.forEach.call( inputs, function( input )
+  var inputs = document.querySelectorAll('.field-file__input');
+  Array.prototype.forEach.call(inputs, function(input)
   {
-    const label  = closest(input, '.field-file').querySelector( '.field-file__name-text' ),
-        labelVal = label.innerHTML;
+    const label = closest(input, '.field-file').querySelector('.field-file__name-text');
+    const labelVal = label.innerHTML;
 
-    input.addEventListener( 'change', function( e ) {
-      let fileName = '';
-      if( this.files && this.files.length > 1 ) {
-        fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-      }
-      else {
-        fileName = e.target.value.split( '\\' ).pop();
-      }
+    input.addEventListener('change', function(e) {
+      const fileName = (this.files && this.files.length > 1)
+        ? (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length)
+        : e.target.value.split('\\').pop();
 
-      if( fileName ) {
+      if (fileName) {
         label.innerHTML = `<span class="field-file__file-name">${fileName}</span>`;
       }
       else {
