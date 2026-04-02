@@ -9,7 +9,7 @@
 
 | Инструмент | Для чего |
 |---|---|
-| **Dart Sass** (`sass`) | Компиляция SCSS → CSS |
+| **Dart Sass** (`sass v.1.98.0`) | Компиляция SCSS → CSS |
 | **PostCSS** | Autoprefixer, сортировка media-queries, inline SVG |
 | **esbuild** | Сборка JS в один бандл (IIFE), минификация |
 | **browser-sync** | Dev-сервер с live-reload |
@@ -84,7 +84,7 @@ project/
 │   │   ├── variables.scss
 │   │   ├── mixins.scss
 │   │   ├── print.scss
-│   │   ��── style.scss         # Генерируется автоматически!
+│   │   └── style.scss         # Генерируется автоматически!
 │   └── index.html             # Главная страница
 │
 ├── scripts/                   # Скрипты сборщика
@@ -191,6 +191,7 @@ src/blocks/my-block/
 ├── my-block.html
 ├── my-block.scss
 ├── my-block.js
+├── bg-img/
 └── img/
 ```
 
@@ -402,5 +403,6 @@ export default [];
 
 ## Требования
 
-- Node.js ≥ 18
+- Node.js ≥ 20 (22)+
 - npm ≥ 9
+  
