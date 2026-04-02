@@ -11,7 +11,17 @@
   }
 
   @media (width >= 1200px) {
-    background: greenyellow;
+    color: black;
+    background: rgb(0, 156, 130);
+  }
+
+  &__img {
+    border-radius: 24px;;
+
+    img {
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
   &__btn {
