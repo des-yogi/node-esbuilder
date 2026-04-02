@@ -1,4 +1,3 @@
-(function(){
-  //if (!autosize()) return;
+(function () {
   autosize(document.querySelectorAll('textarea'));
-})();
+}());

@@ -1,8 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-<symbol id="bottom-arrow-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.73 8.36" width="14.73" height="8.36"><path d="M14.44.29a1 1 0 0 0-1.44 0L7.36 5.95 1.71.29A1 1 0 0 0 .29 1.71l6.37 6.36a1 1 0 0 0 1.41 0l6.36-6.36a1 1 0 0 0 .01-1.42z"/></symbol>
-<symbol id="left-arrow-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.36 14.73" width="8.36" height="14.73"><path d="M2.41 7.36l5.66-5.65A1 1 0 0 0 6.66.29L.29 6.66a1 1 0 0 0 0 1.41l6.36 6.36A1 1 0 0 0 8.07 13z"/></symbol>
 <symbol id="left-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 14.73" width="13" height="14.73"><path d="M13 6.36H3.41l4.66-4.65A1 1 0 1 0 6.66.29L.29 6.66a1 1 0 0 0 0 1.41l6.36 6.36A1 1 0 0 0 8.07 13L3.41 8.36H13z"/></symbol>
-<symbol id="right-arrow-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.36 14.73" width="8.36" height="14.73"><path d="M8.07 6.66L1.71.29A1 1 0 0 0 .29 1.71l5.66 5.65L.29 13a1 1 0 0 0 1.41 1.41l6.37-6.34a1 1 0 0 0 0-1.41z"/></symbol>
 <symbol id="right-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 14.73"><path d="M12.71 6.66L6.34.29a1 1 0 0 0-1.41 1.42l4.66 4.65H0v2h9.59L4.93 13a1 1 0 0 0 1.41 1.41l6.36-6.36a1 1 0 0 0 .01-1.39z"/></symbol>
-<symbol id="top-arrow-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.73 8.36" width="14.73" height="8.36"><path fill="#1d1c1b" d="M14.44 6.66L8.07.29a1 1 0 0 0-1.41 0L.29 6.66a1 1 0 1 0 1.42 1.41l5.65-5.66L13 8.07a1 1 0 1 0 1.41-1.41z"/></symbol>
 </svg>

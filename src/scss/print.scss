@@ -33,7 +33,7 @@
   pre,
   blockquote {
     border: 1px solid #999 !important; // stylelint-disable-line  declaration-no-important
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   thead {
@@ -42,7 +42,7 @@
 
   tr,
   img {
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   img {
@@ -58,7 +58,7 @@
 
   h2,
   h3 {
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   table {

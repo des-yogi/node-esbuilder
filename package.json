@@ -1,6 +1,6 @@
 {
   "name": "node-bem-starter",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "A modern Node.js project builder: esbuild & BEM notation",
   "author": "Igor Beliakovski",
   "license": "MIT",
@@ -13,10 +13,14 @@
     "build": "cross-env NODE_ENV=production FORCE_COLOR=2 node scripts/build.mjs",
     "dev": "cross-env FORCE_COLOR=2 node scripts/dev-server.mjs",
     "start": "npm run dev",
+    "create-block": "cross-env FORCE_COLOR=2 node createBlock.mjs",
     "gen:style": "cross-env FORCE_COLOR=2 node scripts/generateStyle.mjs",
     "lint:css": "stylelint \"src/**/*.scss\"",
+    "lint:css:fix": "stylelint \"src/**/*.scss\" --fix",
     "lint:js": "eslint \"src/**/*.js\"",
-    "create-block": "cross-env FORCE_COLOR=2 node createBlock.mjs",
+    "lint:js:fix": "eslint \"src/**/*.js\" --fix",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:fix": "npm run lint:js:fix && npm run lint:css:fix",
     "img:opt": "cross-env FORCE_COLOR=2 node scripts/img-opt.mjs"
   },
   "browserslist": [
@@ -25,20 +29,24 @@
     "not dead"
   ],
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "autoprefixer": "^10.4.21",
     "browser-sync": "^3.0.4",
     "chalk": "^5.6.2",
     "chokidar": "^5.0.0",
     "cross-env": "^10.1.0",
     "esbuild": "^0.27.5",
-    "eslint": "^9.28.0",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0",
     "postcss": "^8.5.6",
     "postcss-extract-media-query": "^3.2.0",
     "postcss-inline-svg": "^6.0.0",
+    "postcss-scss": "^4.0.9",
     "postcss-sort-media-queries": "^6.3.3",
     "sass": "^1.98.0",
     "sharp": "^0.34.5",
-    "stylelint": "^16.20.0"
+    "stylelint": "^17.6.0",
+    "stylelint-config-standard-scss": "^17.0.0"
   },
   "dependencies": {
     "@coreui/coreui": "^5.6.1",
