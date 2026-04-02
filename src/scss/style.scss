@@ -2,13 +2,13 @@
 // Этот файл сгенерирован автоматически на основе projectConfig.json и getFilesList().
 // Не редактируйте его вручную — изменения будут перезаписаны при следующей генерации.
 // Подключения из addCssBefore:
+@use './_coreui-custom' as *;
 @use './variables' as *;
 @use './mixins' as *;
 
 // SCSS-файлы блоков из projectConfig.blocks:
 @use '../blocks/page/page';
 @use '../blocks/test-block/test-block';
-@use '../blocks/test-block-2/test-block-2';
 
 // Подключения из addCssAfter:
 @use './print' as *;

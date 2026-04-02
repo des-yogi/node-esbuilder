@@ -9,10 +9,7 @@
     "test-block": []
   },
   "addCssBefore": [
-    "../../node_modules/bootstrap/scss/_functions",
-    "../../node_modules/bootstrap/scss/_variables",
-    "../../node_modules/bootstrap/scss/_mixins",
-    "../../node_modules/bootstrap/scss/_modal",
+    "src/scss/_coreui-custom.scss",
     "src/scss/variables.scss",
     "src/scss/mixins.scss"
   ],
@@ -20,7 +17,6 @@
     "src/scss/print.scss"
   ],
   "addJsBefore": [
-    "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
     "./node_modules/autosize/dist/autosize.min.js"
   ],
   "addJsAfter": [],

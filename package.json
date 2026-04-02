@@ -36,12 +36,12 @@
     "postcss-extract-media-query": "^3.2.0",
     "postcss-inline-svg": "^6.0.0",
     "postcss-sort-media-queries": "^5.2.0",
-    "sass": "^1.89.2",
+    "sass": "^1.98.0",
     "sharp": "^0.34.5",
     "stylelint": "^16.20.0"
   },
   "dependencies": {
-    "autosize": "^6.0.1",
-    "bootstrap": "^5.3.8"
+    "@coreui/coreui": "^5.6.1",
+    "autosize": "^6.0.1"
   }
 }

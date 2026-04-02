@@ -1,0 +1,61 @@
+// Актуально для CoreUI 5.6.1 (на 02.04.2026) и Bootstrap 5.3.8
+
+// Базовые зависимости (обязательно)
+@use '@coreui/coreui/scss/functions' as *;
+@use '@coreui/coreui/scss/variables' as *;
+// @use '@coreui/coreui/scss/variables-dark' as *;
+@use '@coreui/coreui/scss/maps' as *; // для использования карт цветов (color maps) от CoreUI, например, для генерации оттенков цвета (color shades) в миксинах
+@use '@coreui/coreui/scss/mixins' as *; // для использования карт цветов (color maps) от CoreUI, например, для генерации оттенков цвета (color shades) в миксинах
+// @use '@coreui/coreui/scss/utilities' as *; // для использования утилит от CoreUI, например, для генерации классов утилит (utility classes) в миксинах
+
+// CSS-переменные --cui-* (обязательно для использования стилей компонентов)
+@use '@coreui/coreui/scss/root';
+
+// @use '@coreui/coreui/scss/reboot'; (необязательно, если не нужны базовые стили для HTML-элементов от CoreUI)
+
+// Только нужные компоненты (Layout & components):
+//
+// @use '@coreui/coreui/scss/type';
+// @use '@coreui/coreui/scss/images';
+// @use '@coreui/coreui/scss/containers';
+// @use '@coreui/coreui/scss/grid';
+// @use '@coreui/coreui/scss/tables';
+// @use '@coreui/coreui/scss/forms';
+// @use '@coreui/coreui/scss/buttons';
+// @use '@coreui/coreui/scss/transitions';
+// @use '@coreui/coreui/scss/dropdown';
+// @use '@coreui/coreui/scss/button-group';
+// @use '@coreui/coreui/scss/nav';
+// @use '@coreui/coreui/scss/navbar';
+// @use '@coreui/coreui/scss/card';
+// @use '@coreui/coreui/scss/accordion';
+// @use '@coreui/coreui/scss/breadcrumb';
+// @use '@coreui/coreui/scss/pagination';
+// @use '@coreui/coreui/scss/badge';
+// @use '@coreui/coreui/scss/alert';
+// @use '@coreui/coreui/scss/progress';
+// @use '@coreui/coreui/scss/list-group';
+// @use '@coreui/coreui/scss/close';
+// @use '@coreui/coreui/scss/toasts';
+// @use '@coreui/coreui/scss/modal';
+// @use '@coreui/coreui/scss/tooltip';
+// @use '@coreui/coreui/scss/popover';
+// @use '@coreui/coreui/scss/carousel';
+// @use '@coreui/coreui/scss/spinners';
+// @use '@coreui/coreui/scss/offcanvas';
+// @use '@coreui/coreui/scss/placeholders';
+
+// новые, в дополнение к Bootstrap 5
+//
+// @use '@coreui/coreui/scss/chip';
+// @use '@coreui/coreui/scss/avatar';
+// @use '@coreui/coreui/scss/callout';
+// @use '@coreui/coreui/scss/footer';
+// @use '@coreui/coreui/scss/header';
+// @use '@coreui/coreui/scss/icon'; // требует отдельной установки иконок (npm install @coreui/icons --save) и подключения их стилей (import '@coreui/icons/css/coreui-icons.min.css'; в src/js/index.js ???)
+// @use '@coreui/coreui/scss/sidebar';
+
+// Helpers & Utilities (необязательно, если не нужны миксины и утилиты от CoreUI)
+//
+// @use '@coreui/coreui/scss/helpers'; // для использования миксинов от CoreUI, например, для генерации классов утилит (utility classes) в миксинах
+// @use '@coreui/coreui/scss/utilities/api'; // для использования утилит от CoreUI, например, для использования классов маргинов, паддингов и т.п.

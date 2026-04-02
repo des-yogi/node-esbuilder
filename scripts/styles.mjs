@@ -26,6 +26,7 @@ async function compileSingleScss(srcScss, destCss, isProd) {
     sassResult = sass.compile(srcScss, {
       style: isProd ? 'compressed' : 'expanded',
       sourceMap: !isProd,
+      loadPaths: [path.join(rootDir, 'node_modules')],
     });
   } catch (err) {
     logError('[styles] Ошибка компиляции Sass (' + path.relative(rootDir, srcScss) + '): ' + err.message);
