@@ -10,6 +10,7 @@
 @use '../blocks/page/page';
 @use '../blocks/test-block/test-block';
 @use '../blocks/hero/hero';
+@use '../blocks/embed-responsive/embed-responsive';
 
 // Подключения из addCssAfter:
 @use './print' as *;

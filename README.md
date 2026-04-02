@@ -7,14 +7,14 @@
 
 ## Стек
 
-| Инструмент | Для чего |
-|---|---|
-| **Dart Sass** (`sass v.1.98.0`) | Компиляция SCSS → CSS |
-| **PostCSS** | Autoprefixer, сортировка media-queries, inline SVG |
-| **esbuild** | Сборка JS в один бандл (IIFE), минификация |
-| **browser-sync** | Dev-сервер с live-reload |
-| **chokidar** | Слежение за изменениями файлов |
-| **sharp** | Оптимизация и конвертация изображений (WebP, AVIF) |
+| Инструмент                   | Для чего                                           |
+| ---------------------------- | -------------------------------------------------- |
+| **Dart Sass:** "sass: 1.98.0 | Компиляция SCSS → CSS                              |
+| **PostCSS: "^8.5.6"**        | Autoprefixer, сортировка media-queries, inline SVG |
+| **esbuild: "^0.27.5"**       | Сборка JS в один бандл (IIFE), минификация         |
+| **browser-sync: "^3.0.4"**   | Dev-сервер с live-reload                           |
+| **chokidar**: "^5.0.0"       | Слежение за изменениями файлов                     |
+| **sharp**: "0.34.5"          | Оптимизация и конвертация изображений (WebP, AVIF) |
 
 ## Быстрый старт
 
@@ -35,16 +35,16 @@ npm run build
 
 ## Команды
 
-| Команда | Что делает |
-|---|---|
-| `npm run dev` | Dev-сервер: сборка + browser-sync + во��черы |
-| `npm start` | Алиас для `npm run dev` |
-| `npm run build` | Production-сборка (минификация, без sourcemaps) |
-| `npm run create-block` | Создание нового БЭМ-блока |
-| `npm run gen:style` | Перегенерация `style.scss` |
-| `npm run img:opt -- <вход> <выход>` | Оптимизация картинок + конвертация в WebP/AVIF |
-| `npm run lint:css` | Проверка SCSS через stylelint |
-| `npm run lint:js` | Проверка JS через eslint |
+| Команда                             | Что делает                                      |
+| ----------------------------------- | ----------------------------------------------- |
+| `npm run dev`                       | Dev-сервер: сборка + browser-sync + во��черы    |
+| `npm start`                         | Алиас для `npm run dev`                         |
+| `npm run build`                     | Production-сборка (минификация, без sourcemaps) |
+| `npm run create-block`              | Создание нового БЭМ-блока                       |
+| `npm run gen:style`                 | Перегенерация `style.scss`                      |
+| `npm run img:opt -- <вход> <выход>` | Оптимизация картинок + конвертация в WebP/AVIF  |
+| `npm run lint:css`                  | Проверка SCSS через stylelint                   |
+| `npm run lint:js`                   | Проверка JS через eslint                        |
 
 ## Структура проекта
 
@@ -157,18 +157,18 @@ project/
 
 ### Описание полей
 
-| Поле | Описание |
-|---|---|
-| `blocks` | Объект: ключ — имя блока, значение — `[]`. Порядок ключей = порядок в CSS |
-| `addCssBefore` | SCSS-файлы, подключаемые ДО блоков в `style.scss` |
-| `addCssAfter` | SCSS-файлы, подключаемые ПОСЛЕ блоков |
-| `addJsBefore` | JS-файлы, подключаемые ДО блоков в бандле |
-| `addJsAfter` | JS-файлы, подключаемые ПОСЛЕ блоков |
-| `copiedJs` | JS-файлы, копируемые в `build/js/` без сборки |
-| `copiedCss` | CSS-файлы, копируемые в `build/css/` без сборки |
-| `singleCompiled` | SCSS-файлы, компилируемые в отдельные CSS (не в общий бандл) |
-| `allowedImageExtensions` | Белый список расширений картинок при копировании |
-| `allowedVideoExtensions` | Белый список расширений видео при копировании |
+| Поле                     | Описание                                                                  |
+| ------------------------ | ------------------------------------------------------------------------- |
+| `blocks`                 | Объект: ключ — имя блока, значение — `[]`. Порядок ключей = порядок в CSS |
+| `addCssBefore`           | SCSS-файлы, подключаемые ДО блоков в `style.scss`                         |
+| `addCssAfter`            | SCSS-файлы, подключаемые ПОСЛЕ блоков                                     |
+| `addJsBefore`            | JS-файлы, подключаемые ДО блоков в бандле                                 |
+| `addJsAfter`             | JS-файлы, подключаемые ПОСЛЕ блоков                                       |
+| `copiedJs`               | JS-файлы, копируемые в `build/js/` без сборки                             |
+| `copiedCss`              | CSS-файлы, копируемые в `build/css/` без сборки                           |
+| `singleCompiled`         | SCSS-файлы, компилируемые в отдельные CSS (не в общий бандл)              |
+| `allowedImageExtensions` | Белый список расширений картинок при копировании                          |
+| `allowedVideoExtensions` | Белый список расширений видео при копировании                             |
 
 ## БЭМ-нейминг
 
@@ -186,6 +186,7 @@ npm run create-block
 ```
 
 Создаёт:
+
 ```
 src/blocks/my-block/
 ├── my-block.html
@@ -306,6 +307,7 @@ npm run img:opt -- design/hero src/blocks/hero/img
 ```
 
 **Что делает для каждого JPG/PNG:**
+
 - Создаёт оптимизированный оригинал (mozjpeg / PNG effort:8)
 - Создаёт `.webp` версию
 - Создаёт `.avif` версию
@@ -382,11 +384,11 @@ JS-файлы блоков **опциональны** — если у блока
 
 ## Режимы сборки
 
-| | Development (`npm run dev`) | Production (`npm run build`) |
-|---|---|---|
-| CSS | expanded + sourcemaps | compressed, без sourcemaps |
-| JS | без минификации + sourcemaps | минификация, без sourcemaps |
-| `process.env.NODE_ENV` | `'development'` | `'production'` |
+|                        | Development (`npm run dev`)  | Production (`npm run build`) |
+| ---------------------- | ---------------------------- | ---------------------------- |
+| CSS                    | expanded + sourcemaps        | compressed, без sourcemaps   |
+| JS                     | без минификации + sourcemaps | минификация, без sourcemaps  |
+| `process.env.NODE_ENV` | `'development'`              | `'production'`               |
 
 ## Пользовательские PostCSS-плагины
 
@@ -405,4 +407,3 @@ export default [];
 
 - Node.js ≥ 20 (22)+
 - npm ≥ 9
-  
