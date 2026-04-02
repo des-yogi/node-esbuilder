@@ -9,6 +9,8 @@ package-lock.json
 .DS_Store
 *.log
 *.txt
+*.jpg
+*.png
 *.bak
 *.sublime-*
 *.rar
