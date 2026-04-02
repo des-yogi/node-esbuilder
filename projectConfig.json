@@ -6,7 +6,8 @@
   },
   "blocks": {
     "page": [],
-    "test-block": []
+    "test-block": [],
+    "hero": []
   },
   "addCssBefore": [
     "src/scss/_coreui-custom.scss",
@@ -24,10 +25,19 @@
   "copiedCss": [],
   "singleCompiled": [],
   "allowedImageExtensions": [
-    "jpg", "jpeg", "png", "gif", "svg", "ico", "webp", "avif"
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "svg",
+    "ico",
+    "webp",
+    "avif"
   ],
   "allowedVideoExtensions": [
-    "mp4", "webm", "ogv"
+    "mp4",
+    "webm",
+    "ogv"
   ],
   "lintCss": true,
   "lintJs": false
