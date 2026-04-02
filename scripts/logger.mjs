@@ -48,16 +48,16 @@ import chalk from 'chalk';
 // Цвета для тегов — добавляй свои по вкусу
 const tagColors = {
   '[build]':         chalk.bold.hex('#F8F8F2'),
-  '[clean]':         chalk.bold.hex('#F8F8F2'),
-  '[generateStyle]': chalk.bold.hex('#CCFF00'),
-  '[styles]':        chalk.bold.hex('#CCFF00'),
-  '[scripts]':       chalk.bold.hex('#00FFFF'),
-  '[assets]':        chalk.bold.hex('#F1FA8C'),
-  '[sprite-svg]':    chalk.bold.hex('#50FA7B'),
-  '[html]':          chalk.bold.hex('#0000FF'),
-  '[dev-server]':    chalk.bold.hex('#F8F8F2'),
-  '[createBlock]':   chalk.bold.hex('#9457EB'),
-  '[img-opt]':       chalk.bold.magentaBright,
+  '[clean]':         chalk.hex('#F8F8F2'),
+  '[generateStyle]': chalk.hex('#CCFF00'),
+  '[styles]':        chalk.hex('#CCFF00'),
+  '[scripts]':       chalk.hex('#00FFFF'),
+  '[assets]':        chalk.hex('#F1FA8C'),
+  '[sprite-svg]':    chalk.hex('#50FA7B'),
+  '[html]':          chalk.hex('#0000FF'),
+  '[dev-server]':    chalk.hex('#F8F8F2'),
+  '[createBlock]':   chalk.hex('#9457EB'),
+  '[img-opt]':       chalk.magentaBright,
 };
 
 const defaultTagStyle = chalk.bold.hex('#FFFFFF');

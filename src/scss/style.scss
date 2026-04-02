@@ -9,6 +9,7 @@
 // SCSS-файлы блоков из projectConfig.blocks:
 @use '../blocks/page/page';
 @use '../blocks/test-block/test-block';
+@use '../blocks/hero/hero';
 
 // Подключения из addCssAfter:
 @use './print' as *;
