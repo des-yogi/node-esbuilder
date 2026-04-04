@@ -48,6 +48,22 @@ export async function devServer() {
   // Защита от параллельных запусков
   let isRebuilding = false;
 
+  const rebuildProjectConfigDependentParts = async () => {
+    await generateStyleEntry();
+    await buildStyles({ mode: 'development' });
+    await buildScripts({ mode: 'development' });
+    await copyAssets();
+    await buildHtml();
+  };
+
+  const rebuildAllDev = async () => {
+    await generateStyleEntry();
+    await buildStyles({ mode: 'development' });
+    await buildScripts({ mode: 'development' });
+    await copyAssets();
+    await buildHtml();
+  };
+
   // Вотчер для projectConfig.json
   const configWatcher = chokidar.watch(projectConfigPath, {
     ignoreInitial: true,
@@ -58,11 +74,7 @@ export async function devServer() {
     isRebuilding = true;
     logInfo('[dev-server] projectConfig.json изменён — пересборка (без clean)');
     try {
-      await generateStyleEntry();
-      await buildStyles({ mode: 'development' });
-      await buildScripts({ mode: 'development' });
-      await copyAssets();
-      await buildHtml();
+      await rebuildProjectConfigDependentParts();
     } catch (err) {
       logError('[dev-server] Ошибка пересборки: ' + err.message);
     } finally {
@@ -103,11 +115,7 @@ export async function devServer() {
       ) {
         await copyAssets();
       } else {
-        await generateStyleEntry();
-        await buildStyles({ mode: 'development' });
-        await buildScripts({ mode: 'development' });
-        await copyAssets();
-        await buildHtml();
+        await rebuildAllDev();
       }
     } catch (err) {
       logError('[dev-server] Ошибка: ' + err.message);
