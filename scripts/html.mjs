@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { logInfo, logWarn, logError } from './logger.mjs';
+import { formatHtmlFile } from './formatHtml.mjs';
 
 /**
  * Сборка HTML:
@@ -197,7 +198,7 @@ async function expandIncludes(content, baseRelDir, context, stack) {
   return result;
 }
 
-export async function buildHtml() {
+export async function buildHtml({ mode = 'development' } = {}) {
   logInfo('[html] Старт сборки HTML с инклюдами и переменными');
 
   await mkdir(buildDir, { recursive: true });
@@ -229,6 +230,9 @@ export async function buildHtml() {
 
     const destPath = path.join(buildDir, fileName);
     await writeFile(destPath, processed, 'utf8');
+    if (mode === 'production') {
+      await formatHtmlFile(destPath);
+    }
 
     logInfo('[html] Собран HTML: ' + path.relative(rootDir, destPath));
   }

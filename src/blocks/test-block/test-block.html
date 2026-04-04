@@ -7,12 +7,28 @@
 -->
 
 <div class="container  test-block">
-  <h1>@@title</h1>
+
+  <h1 class="test-block__title">@@title</h1>
+  <p>@@user.name</p>
+  <p>@@user.position</p>
+
   <div class="test-block__text">
     @@text
 
     <button class="test-block__btn">
       <span>Текст</span>
+    </button>
+
+    <button class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+      <span>Dropdown button</span>
+    </button>
+
+    <button class="btn">
+      <span>Текст 2</span>
+      <svg width="24" height="24" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img/sprite-svg.svg#right-arrow"></use></svg>
     </button>
 
   </div>

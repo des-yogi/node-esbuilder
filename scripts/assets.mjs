@@ -69,7 +69,7 @@ async function copyDirRecursive(srcRoot, destRoot, label, allowedExts) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       logWarn(
-        '[assets] Папка для ' + label + ' не найдена (' + path.relative(rootDir, srcRoot) + '), ��ропускаем'
+        '[assets] Папка для ' + label + ' не найдена (' + path.relative(rootDir, srcRoot) + '), пропускаем'
       );
       return;
     }
@@ -143,7 +143,7 @@ async function copyBlockImagesFlat(allowedExts) {
 
           await copyFile(srcPath, destPath);
           logInfo(
-            '[assets] Копирован изображение блока: ' + blockName + '/img/' + entry.name +
+            '[assets] Скопировано изображение блока: ' + blockName + '/img/' + entry.name +
             ' → ' + path.relative(rootDir, destPath)
           );
         }
@@ -194,7 +194,7 @@ async function copyBlockVideosFlat(allowedExts) {
           if (!entry.isFile()) continue;
 
           if (!isExtAllowed(entry.name, allowedExts)) {
-            logInfo('[assets] Пропущен видео блока (расширение не в списке): ' + blockName + '/video/' + entry.name);
+            logInfo('[assets] Пропущено видео блока (расширение не в списке): ' + blockName + '/video/' + entry.name);
             continue;
           }
 
@@ -211,7 +211,7 @@ async function copyBlockVideosFlat(allowedExts) {
           await copyFile(srcPath, uniqueDestPath);
 
           logInfo(
-            '[assets] Копирован видеофайл блока: ' + blockName + '/video/' + entry.name +
+            '[assets] Скопирован видеофайл блока: ' + blockName + '/video/' + entry.name +
             ' → ' + path.relative(rootDir, uniqueDestPath)
           );
         }

@@ -33,7 +33,7 @@ export async function build({ mode = 'development' } = {}) {
   await buildScripts({ mode });
   await copyAssets();
   await buildSvgSprite();  // после copyAssets, чтобы не перезаписать свежий спрайт
-  await buildHtml();
+  await buildHtml({ mode });
 
   logInfo('[build] Сборка завершена');
 }

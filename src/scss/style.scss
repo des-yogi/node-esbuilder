@@ -7,10 +7,29 @@
 @use './mixins' as *;
 
 // SCSS-файлы блоков из projectConfig.blocks:
+@use '../blocks/typo/typo';
 @use '../blocks/page/page';
-@use '../blocks/test-block/test-block';
-@use '../blocks/hero/hero';
+@use '../blocks/breadcrumbs/breadcrumbs';
+@use '../blocks/btn/btn';
+@use '../blocks/burger/burger';
+@use '../blocks/close/close';
 @use '../blocks/embed-responsive/embed-responsive';
+@use '../blocks/field-actions/field-actions';
+@use '../blocks/field-checkbox/field-checkbox';
+@use '../blocks/field-radio/field-radio';
+@use '../blocks/field-text/field-text';
+@use '../blocks/form/form';
+@use '../blocks/logo/logo';
+@use '../blocks/main-nav/main-nav';
+@use '../blocks/page-footer/page-footer';
+@use '../blocks/page-header/page-header';
+@use '../blocks/pagination/pagination';
+@use '../blocks/sprite-svg/sprite-svg';
+@use '../blocks/test-block/test-block';
+@use '../blocks/table/table';
+@use '../blocks/table-mobile-scroll/table-mobile-scroll';
+@use '../blocks/table-responsive/table-responsive';
+@use '../blocks/tabs/tabs';
 
 // Подключения из addCssAfter:
 @use './print' as *;

@@ -1,20 +1,15 @@
 @use '../../scss/variables.scss' as *;
 
-// В этом файле должны быть стили для БЭМ-блока btn, его элементов,
-// модификаторов, псевдоселекторов, псевдоэлементов, @media-условий...
-// Очередность: http://nicothin.github.io/idiomatic-pre-CSS/#priority
-
 .btn {
   $block-name: &; // #{$block-name}__element
 
   box-sizing: border-box;
-  display: inline-block;
+  display: inline-flex;
   margin: 0;
 
   // padding: $field-padding-vertical  $field-padding-horizontal;
   white-space: nowrap;
   vertical-align: middle;
-  user-select: none;
   text-align: center;
   font-size: 1em;
   font-family: inherit;
@@ -26,6 +21,7 @@
   border: 1px solid $gray-lighter;
   background-color: $gray-lightest;
   background-image: none;
+  user-select: none;
   cursor: pointer;
 
   &:hover,
@@ -37,10 +33,10 @@
     // border-color: darken($gray-lighter, 12%);
   }
 
-  &:active,
-  &:focus {
+  //&:active,
+  //&:focus {
     // @include field-focus;
-  }
+  //}
 
   &--disabled,
   &:disabled {

@@ -5,10 +5,29 @@
     "blocksDirName": "blocks"
   },
   "blocks": {
+    "typo": [],
     "page": [],
+    "breadcrumbs": [],
+    "btn": [],
+    "burger": [],
+    "close": [],
+    "embed-responsive": [],
+    "field-actions": [],
+    "field-checkbox": [],
+    "field-radio": [],
+    "field-text": [],
+    "form": [],
+    "logo": [],
+    "main-nav": [],
+    "page-footer": [],
+    "page-header": [],
+    "pagination": [],
+    "sprite-svg": [],
     "test-block": [],
-    "hero": [],
-    "embed-responsive": []
+    "table": [],
+    "table-mobile-scroll": [],
+    "table-responsive": [],
+    "tabs": []
   },
   "addCssBefore": [
     "src/scss/_coreui-custom.scss",

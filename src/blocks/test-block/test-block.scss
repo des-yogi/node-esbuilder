@@ -11,12 +11,17 @@
   }
 
   @media (width >= 1200px) {
-    color: black;
-    background: rgb(0 156 130);
+    color: $black;
+    background: rgb(0, 156, 130);
+  }
+
+  &__title {
+    font-size: calc(16px * 2);
+    margin-bottom: calc(16px * 1.5);
   }
 
   &__img {
-    border-radius: 24px;;
+    border-radius: calc(2em + 5px);
 
     img {
       object-fit: cover;
@@ -35,10 +40,10 @@
     font-weight: 500;
     color: #f00;
     background-color: paleturquoise;
-    background-position: center left 10px;
+    background-position: center right 5px;
     background-repeat: no-repeat;
-    background-size: contain;
-    background-image: svg-load('../blocks/sprite-svg/svg/left-arrow-s.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+    background-size: 20px;
+    background-image: svg-load('../blocks/sprite-svg/svg/right-arrow.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
     border: 2px solid var(--border-color);
     cursor: pointer;
   }

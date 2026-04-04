@@ -7,6 +7,7 @@ import { buildStyles } from './styles.mjs';
 import { buildScripts } from './scripts.mjs';
 import { buildHtml } from './html.mjs';
 import { copyAssets } from './assets.mjs';
+import { buildSvgSprite } from './sprite-svg.mjs';
 import { generateStyleEntry } from './generateStyle.mjs';
 import { logInfo, logError } from './logger.mjs';
 
@@ -82,7 +83,10 @@ export async function devServer() {
     logInfo(`[dev-server] Изменение: ${event} ${rel}`);
 
     try {
-      if (rel.endsWith('.scss')) {
+      // SVG-спрайт: пересобирать при add/change/unlink
+      if (/^blocks\/sprite-svg\/svg\/[^/]+\.svg$/i.test(rel)) {
+        await buildSvgSprite();
+      } else if (rel.endsWith('.scss')) {
         if (rel !== 'scss/style.scss') {
           await generateStyleEntry();
         }

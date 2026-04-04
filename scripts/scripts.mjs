@@ -76,7 +76,7 @@ export async function buildScripts({ mode = 'development' } = {}) {
     bundle: true,
     outfile: outFile,
     format: 'iife',
-    target: ['es2019'],
+    target: ['es2020'],
     sourcemap: !isProd,
     minify: isProd,
     logLevel: 'info',

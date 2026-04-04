@@ -69,7 +69,7 @@ if (blockName) {
         `// @use 'sass:color' as *;   // color.adjust(), color.scale(), color.mix(), color.change(), color.complement(), color.invert()\n` +
         `// @use 'sass:string' as *;  // string.index(), string.slice(), string.to-upper-case(), string.to-lower-case(), string.length(), string.insert()\n\n` +
         `@use '../../scss/variables' as *;\n\n` +
-        `.${blockName} {\n\n  $block-name: &; // #{$block-name}__element\n\n}\n`;
+        `.${blockName} {\n  $block-name: &; // #{$block-name}__element\n\n}\n`;
 
       // Добавляем блок в projectConfig, если его ещё нет
       if (!(blockName in projectConfig.blocks)) {
@@ -85,9 +85,9 @@ if (blockName) {
       }
     } else if (extension === 'html') {
       fileContent =
-        `<!--DEV\n\n` +
-        `Для использования этого файла как шаблона:\n\n` +
-        `@@include('blocks/${blockName}/${blockName}.html')\n\n` +
+        `<!--DEV\n` +
+        `Для использования этого файла как шаблона:\n` +
+        `@@include('blocks/${blockName}/${blockName}.html')\n` +
         `-->\n\n` +
         `<div class="${blockName}">content</div>\n`;
     } else if (extension === 'js') {
