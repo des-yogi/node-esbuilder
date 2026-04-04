@@ -1,6 +1,8 @@
 import { readdir, readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { optimize } from 'svgo';
+import svgoConfig from '../svgo.config.mjs';
 import { logInfo, logWarn, logError } from './logger.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,6 +21,13 @@ const rootDir = path.resolve(__dirname, '..');
 const srcIconsDir = path.join(rootDir, 'src', 'blocks', 'sprite-svg', 'svg');
 const buildImgDir = path.join(rootDir, 'build', 'img');
 const spriteOutputPath = path.join(buildImgDir, 'sprite-svg.svg');
+
+function getAttr(attrsStr, attrName) {
+  const escapedName = attrName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`${escapedName}\\s*=\\s*["']([^"']*)["']`, 'i');
+  const m = attrsStr.match(re);
+  return m ? m[1] : null;
+}
 
 export async function buildSvgSprite() {
   logInfo('[sprite-svg] Старт сборки SVG-спрайта');
@@ -52,18 +61,20 @@ export async function buildSvgSprite() {
     const filePath = path.join(srcIconsDir, fileName);
     const raw = await readFile(filePath, 'utf8');
 
-    // Извлекаем открывающий тег <svg ...>
-    const svgOpenMatch = raw.match(/<svg([^>]*)>/i);
-    const svgAttrsStr = svgOpenMatch ? svgOpenMatch[1] : '';
+    // Оптимизируем SVG перед встраиванием в спрайт.
+    const optimized = optimize(raw, svgoConfig);
 
-    // Вспомогательная функция: достаёт значение атрибута из строки атрибутов.
-    // Имена SVG-атрибутов состоят из букв, цифр, дефисов, двоеточий — экранируем двоеточие.
-    function getAttr(attrsStr, attrName) {
-      const escapedName = attrName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const re = new RegExp(`${escapedName}\\s*=\\s*["']([^"']*)["']`, 'i');
-      const m = attrsStr.match(re);
-      return m ? m[1] : null;
+    if (optimized.error) {
+      throw new Error(
+        `[sprite-svg] SVGO ошибка в файле ${path.relative(rootDir, filePath)}: ${optimized.error}`,
+      );
     }
+
+    const svgSource = optimized.data;
+
+    // Извлекаем открывающий тег <svg ...>
+    const svgOpenMatch = svgSource.match(/<svg([^>]*)>/i);
+    const svgAttrsStr = svgOpenMatch ? svgOpenMatch[1] : '';
 
     // Переносим ключевые атрибуты из <svg> в <symbol>
     const viewBox = getAttr(svgAttrsStr, 'viewBox');
@@ -83,8 +94,8 @@ export async function buildSvgSprite() {
       .join(' ');
 
     // Выдёргиваем содержимое <svg>...</svg> без обёртки
-    const svgContentMatch = raw.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
-    const innerContent = svgContentMatch ? svgContentMatch[1].trim() : raw.trim();
+    const svgContentMatch = svgSource.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
+    const innerContent = svgContentMatch ? svgContentMatch[1].trim() : svgSource.trim();
 
     const id = fileName.replace(/\.svg$/i, '');
 
