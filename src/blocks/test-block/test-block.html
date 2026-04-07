@@ -8,36 +8,26 @@
 
 <div class="container  test-block">
 
-  <h1 class="test-block__title">@@title</h1>
-  <p>@@user.name</p>
-  <p>@@user.position</p>
+  <h2 class="test-card__title">@@title</h2>
 
-  <div class="test-block__text">
-    @@text
+    @@if(!isPicture)
+      @@include('../../blocks/logo/logo.html')
+    @@endif
 
-    <button class="test-block__btn">
-      <span>Текст</span>
-    </button>
+    <!-- <figure class="test-card__figure">
+      <img class="test-card__img" src="img/@@img.jpg" alt="@@title">
+    </figure> -->
 
-    <button class="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
-      <span>Dropdown button</span>
-    </button>
 
-    <button class="btn">
-      <span>Текст 2</span>
-      <svg width="24" height="24" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img/sprite-svg.svg#right-arrow"></use></svg>
-    </button>
+    <!-- @@if(isPicture)
+      <figure class="test-card__figure">
+        <img class="test-card__img" src="img/@@img.jpg" alt="@@title">
+      </figure>
+    @@else
+      <div class="h3  test-card__no-image">
+        Изображение отсутствует!
+      </div>
+    @@endif -->
 
-  </div>
-
-  <div class="embed-responsive  embed-responsive--21-9  test-block__img">
-    <picture>
-      <source srcset="img/@@img.webp" type="image/webp">
-      <img src="img/@@img.jpg" width="1086" height="815" alt="" loading="lazy">
-    </picture>
-  </div>
 
 </div>
