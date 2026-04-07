@@ -8,6 +8,7 @@ import { formatHtmlFile } from './formatHtml.mjs';
  * Сборка HTML:
  * - находит файлы src/*.html;
  * - разворачивает @@include('...', { ...context... }) относительно src/;
+ * - обрабатывает условные конструкции @@if(flag)/@@else/@@endif;
  * - подставляет переменные @@var и @@obj.prop из контекста;
  * - удаляет DEV-комментарии <!--DEV ... -->;
  * - сохраняет результат в build/*.html.
@@ -30,6 +31,11 @@ const VAR_RE = /@@([a-zA-Z_$][\w$.]*)/g;
 // DEV-блоки: <!--DEV ... -->
 const DEV_COMMENT_RE = /<!--DEV[\s\S]*?-->/g;
 
+// @@if(flag) ... @@endif  или  @@if(flag) ... @@else ... @@endif
+// Используем более точный паттерн: ifBlock не может содержать @@else/@@endif
+// (это предотвращает захват нескольких последовательных блоков как одного)
+const IF_RE = /@@if\(\s*(!?\s*[\w$.]+)\s*\)([\s\S]*?)@@(?:else([\s\S]*?)@@)?endif/g;
+
 /**
  * Достаёт значение по пути вида "user.name.first" из объекта context.
  */
@@ -46,6 +52,54 @@ function resolveVar(pathExpr, context) {
   }
 
   return value ?? '';
+}
+
+/**
+ * NEW: Вычисляет условие для @@if.
+ * Поддерживает простые ф��аги (isPicture) и отрицание (!isPicture).
+ * Вложенные свойства тоже работают (user.isAdmin).
+ */
+function evaluateCondition(expr, context) {
+  var trimmed = expr.trim();
+  var negated = trimmed.charAt(0) === '!';
+  var varName = negated ? trimmed.slice(1).trim() : trimmed;
+
+  var value = resolveVar(varName, context);
+
+  // Считаем truthy всё, кроме: '', false, null, undefined, 0
+  var truthy = value !== '' && value !== false && value !== null
+    && value !== undefined && value !== 0;
+
+  return negated ? !truthy : truthy;
+}
+
+/**
+ * NEW: Обрабатывает @@if(flag)...@@else...@@endif в содержимом.
+ * Вложенные @@if НЕ поддерживаются — при обнаружении бросает ошибку.
+ */
+function applyConditionals(content, context) {
+  if (!context || typeof context !== 'object') {
+    return content;
+  }
+
+  // Сначала убираем HTML-комментарии, содержащие @@if,
+  // чтобы закомментированные условия не обрабатывались
+  var cleaned = content.replace(/<!--[\s\S]*?-->/g, function (comment) {
+    // Если внутри комментария есть @@if — удаляем весь комментарий
+    if (/@@if\(/.test(comment)) {
+      return '';
+    }
+    return comment;
+  });
+
+  var result = cleaned.replace(IF_RE, function (match, condition, ifBlock, elseBlock) {
+    if (evaluateCondition(condition, context)) {
+      return ifBlock;
+    }
+    return elseBlock || '';
+  });
+
+  return result;
 }
 
 /**
@@ -122,7 +176,11 @@ async function processHtmlFile(relPath, context = {}, stack = new Set()) {
     context,
     stack,
   );
-  const withVars = applyVariables(withIncludes, context);
+
+  // NEW: обработка @@if/@@else/@@endif (между инклудами и переменными)
+  const withConditions = applyConditionals(withIncludes, context);
+
+  const withVars = applyVariables(withConditions, context);
 
   stack.delete(normalized);
   return withVars;
