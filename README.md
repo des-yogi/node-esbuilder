@@ -50,7 +50,7 @@ npm run build
 | `npm run build`                     | Production-сборка (минификация, без sourcemaps)                                 |
 | `npm run deploy`                    | Production-сборка + публикация `build/` в `docs/` ветки `master` (GitHub Pages) |
 | `npm run undeploy`                  | Удаление `docs/` из ветки `master`                                              |
-| `npm run create-block`              | Создание нового БЭМ-блока                                                       |
+| `npm run create-block -- block-name`| Создание нового БЭМ-блока                                                       |
 | `npm run gen:style`                 | Перегенерация `style.scss`                                                      |
 | `npm run img:opt -- <вход> <выход>` | Оптимизация картинок + конвертация в WebP/AVIF                                  |
 | `npm run lint:css`                  | Проверка SCSS через stylelint                                                   |
