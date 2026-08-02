@@ -1,10 +1,10 @@
 design/
+build/
 
 .Saved/
 _arc/
 bower_components/
 node_modules/
-package-lock.json
 .vscode/
 .DS_Store
 *.log

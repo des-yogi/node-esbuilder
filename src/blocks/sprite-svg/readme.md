@@ -16,5 +16,5 @@
 Для вставки на страницу используйте конструкции `svg > use` со ссылками на `id` символа:
 
 ```html
-<svg width="30" height="30" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img/sprite-svg.svg#temp-icon-right-arrow"></use></svg>
+<svg width="24" height="24" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img/sprite-svg.svg#asterisk"></use></svg>
 ```

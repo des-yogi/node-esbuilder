@@ -1,4 +1,5 @@
 @use '../../scss/variables.scss' as *;
+@use '../../scss/mixins.scss' as *;
 
 $line-height: 1.375em !default;
 $border-color: hsl(0deg 0% 60%) !default;
@@ -14,7 +15,7 @@ $border-color: hsl(0deg 0% 60%) !default;
   border: 1px solid $border-color;
 
   table {
-    table-layout: fixed;
+    // table-layout: fixed;
     margin: 0;
     border: 0 !important; // stylelint-disable-line  declaration-no-important
     width: 100%;

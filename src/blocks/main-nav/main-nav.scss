@@ -1,4 +1,5 @@
 @use '../../scss/variables.scss' as *;
+@use '../../scss/mixins' as *;
 @use "sass:math";
 
 $gray-lightest: hsl(0deg 0% 90%) !default;

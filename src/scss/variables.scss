@@ -70,9 +70,11 @@ $line-height: 1.5;
 
 $font-family: 'Roboto', 'Ubuntu', 'Droid Sans', 'Helvetica Neue', 'Arial', sans-serif;
 
-// $font-family: system-ui, 'Roboto', 'Ubuntu', 'Droid Sans', 'Helvetica Neue', 'Arial', sans-serif;
-// $font-family-headings:      system-ui, 'Roboto', 'Ubuntu', 'Droid Sans', 'Helvetica Neue', 'Arial', sans-serif;
-$font-family-monospace: sfmono-regular, menlo, monaco, consolas, liberation mono, courier new, monospace;
+// Практически сейчас не имеет смысла перечислять варианты дефолтных шрифтов для разных систем, если используется свойство font-size-adjust: from-font на теге body
+
+// $font-family: ['Project font'], 'Roboto', 'Ubuntu', 'Droid Sans', 'Helvetica Neue', 'Arial', sans-serif;
+// $font-family-headings: ['Project font'], 'Roboto', 'Ubuntu', 'Droid Sans', 'Helvetica Neue', 'Arial', sans-serif;
+// $font-family-monospace: sfmono-regular, menlo, monaco, consolas, liberation mono, courier new, monospace;
 
 
 // Ширины

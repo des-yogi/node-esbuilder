@@ -58,7 +58,5 @@
     "mp4",
     "webm",
     "ogv"
-  ],
-  "lintCss": true,
-  "lintJs": false
+  ]
 }

@@ -3,8 +3,8 @@
 // код
 // }());
 (function() {
-  const btn = document.querySelector('.test-block__btn');
-  const style = getComputedStyle(btn);
+  const title = document.querySelector('.test-card__title');
+  const style = getComputedStyle(title);
   console.log(style.color);
   console.log(style.backgroundColor);
 })();

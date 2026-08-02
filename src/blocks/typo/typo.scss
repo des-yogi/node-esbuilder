@@ -1,4 +1,5 @@
 @use '../../scss/variables.scss' as *;
+@use '../../scss/mixins.scss' as *;
 @use "sass:math";
 
 // Этот блок ответственен ТОЛЬКО за типографику проекта.
@@ -20,6 +21,7 @@ body {
   // ТОЛЬКО типографика!
   font-family: $font-family;
   font-size: $font-size;
+  font-size-adjust: from-font;
   line-height: $line-height;
   overflow-wrap: break-word; // word-break: break-word; deptrecated
   text-align: left;
@@ -107,77 +109,6 @@ h6 {
   // font-size: $font-size-h6;
 }
 
-p {
-  // http://clagnut.com/blog/2395
-  hyphens: auto;
-  hyphenate-limit-chars: 6 3 3;
-  hyphenate-limit-lines: 2;
-  hyphenate-limit-last: always;
-  hyphenate-limit-zone: 8%;
-}
-
-address {
-  font-style: normal;
-}
-
-ul,
-ol {
-  padding-left: 1.3em;
-}
-
-li {
-  line-height: inherit;
-}
-
-// Вложенные упорядоченные списки: 1, 2, 3, 3.1 -> 3.1.1, 3.1.2…
-ol {
-  list-style: none;
-  counter-reset: something;
-  padding-left: 32px;
-
-  li {
-    counter-increment: something;
-
-    &::before {
-      content: counters(something, ".") ". ";
-    }
-  }
-}
-
-ol ol,
-ul ul,
-ol ul,
-ul ol {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-blockquote {
-  padding: 0;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-
-code {
-  padding: 0.06em 0.3em;
-  color: $text-color;
-  background-color: rgba(#000, 0.08);
-  border-radius: $border-radius;
-}
-
-pre {
-  display: block;
-  width: 100%;
-  margin-bottom: 0.5em;
-  overflow-x: auto;
-  tab-size: 2;
-  background-color: rgba(#000, 0.08);
-
-  code {
-    background: transparent;
-  }
-}
 
 /* stylelint-disable no-descending-specificity */
 .p,
@@ -200,6 +131,78 @@ figure {
     margin-bottom: 0;
   }
 }
+
+p {
+  // http://clagnut.com/blog/2395
+  // hyphens: auto;
+  // hyphenate-limit-chars: 6 3 3;
+  // hyphenate-limit-lines: 2;
+  // hyphenate-limit-last: always;
+  // hyphenate-limit-zone: 8%;
+}
+
+address {
+  font-style: normal;
+}
+
+ul,
+ol {
+  padding-left: 1.3em;
+}
+
+li {
+  line-height: inherit;
+}
+
+// Вложенные упорядоченные списки: 1, 2, 3, 3.1 -> 3.1.1, 3.1.2…
+// ol {
+//   list-style: none;
+//   counter-reset: something;
+//   padding-left: 32px;
+
+//   li {
+//     counter-increment: something;
+
+//     &::before {
+//       content: counters(something, ".") ". ";
+//     }
+//   }
+// }
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+blockquote {
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+code {
+  padding: 0.06em 0.3em;
+  color: $text-color;
+  background-color: rgba(#000, 0.08);
+  border-radius: $border-radius;
+}
+
+pre {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5em;
+  overflow-x: auto;
+  tab-size: 2;
+  background-color: rgba(#000, 0.08);
+
+  code {
+    background: transparent;
+  }
+}
+
 /* stylelint-enable no-descending-specificity */
 
 hr {
