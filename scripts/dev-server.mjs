@@ -43,13 +43,6 @@ export async function devServer() {
   await build({ mode: 'development' });
 
   // 2. старт browser-sync
-  // const bs = browserSync.create();
-  // bs.init({
-  //   server: buildDir,
-  //   files: [`${buildDir}/**/*`],
-  //   open: true,
-  //   notify: false,
-  // });
   const bs = browserSync.create();
   bs.init({
     server: {
@@ -83,14 +76,6 @@ export async function devServer() {
   // Защита от параллельных запусков
   let isRebuilding = false;
 
-  const rebuildProjectConfigDependentParts = async () => {
-    await generateStyleEntry();
-    await buildStyles({ mode: 'development' });
-    await buildScripts({ mode: 'development' });
-    await copyAssets();
-    await buildHtml();
-  };
-
   const rebuildAllDev = async () => {
     await generateStyleEntry();
     await buildStyles({ mode: 'development' });
@@ -114,7 +99,7 @@ export async function devServer() {
     isRebuilding = true;
     logInfo('[dev-server] projectConfig.json изменён — пересборка (без clean)');
     try {
-      await rebuildProjectConfigDependentParts();
+      await rebuildAllDev();
     } catch (err) {
       logError('[dev-server] Ошибка пересборки: ' + err.message);
     } finally {

@@ -4,12 +4,12 @@ import { mkdir, readdir, copyFile, access, stat } from 'node:fs/promises';
 import { getFilesList } from './config.mjs';
 import { logInfo, logWarn, logError } from './logger.mjs';
 
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = path.dirname(__filename);
-var rootDir = path.resolve(__dirname, '..');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '..');
 
-var srcDir = path.join(rootDir, 'src');
-var buildDir = path.join(rootDir, 'build');
+const srcDir = path.join(rootDir, 'src');
+const buildDir = path.join(rootDir, 'build');
 
 /**
  * Проверяет, разрешено ли расширение файла.
@@ -17,7 +17,7 @@ var buildDir = path.join(rootDir, 'build');
  */
 function isExtAllowed(fileName, allowedExts) {
   if (!allowedExts || allowedExts.length === 0) return true;
-  var ext = path.extname(fileName).slice(1).toLowerCase();
+  const ext = path.extname(fileName).slice(1).toLowerCase();
   return allowedExts.indexOf(ext) !== -1;
 }
 
@@ -27,8 +27,8 @@ function isExtAllowed(fileName, allowedExts) {
  */
 async function isNewer(srcPath, destPath) {
   try {
-    var srcStat = await stat(srcPath);
-    var destStat = await stat(destPath);
+    const srcStat = await stat(srcPath);
+    const destStat = await stat(destPath);
     return srcStat.mtimeMs > destStat.mtimeMs;
   } catch (err) {
     if (err.code === 'ENOENT') return true;
@@ -43,12 +43,12 @@ async function isNewer(srcPath, destPath) {
  */
 async function copyDirRecursive(srcRoot, destRoot, label, allowedExts) {
   try {
-    var entries = await readdir(srcRoot, { withFileTypes: true });
+    const entries = await readdir(srcRoot, { withFileTypes: true });
 
-    for (var i = 0; i < entries.length; i++) {
-      var entry = entries[i];
-      var srcPath = path.join(srcRoot, entry.name);
-      var destPath = path.join(destRoot, entry.name);
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      const srcPath = path.join(srcRoot, entry.name);
+      const destPath = path.join(destRoot, entry.name);
 
       if (entry.isDirectory()) {
         await mkdir(destPath, { recursive: true });
@@ -83,11 +83,11 @@ async function copyDirRecursive(srcRoot, destRoot, label, allowedExts) {
 // Генерирует уникальный путь в каталоге destDir: если fileName занят,
 // то name.ext → name-1.ext, name-2.ext и т.д.
 async function getUniqueDestPath(destDir, fileName) {
-  var base = path.basename(fileName, path.extname(fileName));
-  var ext = path.extname(fileName);
+  const base = path.basename(fileName, path.extname(fileName));
+  const ext = path.extname(fileName);
 
-  var candidate = path.join(destDir, fileName);
-  var index = 1;
+  let candidate = path.join(destDir, fileName);
+  let index = 1;
 
   while (true) {
     try {
@@ -108,25 +108,25 @@ async function getUniqueDestPath(destDir, fileName) {
 // Фильтрует по allowedExts. Пропускает неизменённые.
 
 async function copyBlockImagesFlat(allowedExts) {
-  var blocksRoot = path.join(srcDir, 'blocks');
-  var buildImgDir = path.join(buildDir, 'img');
+  const blocksRoot = path.join(srcDir, 'blocks');
+  const buildImgDir = path.join(buildDir, 'img');
 
   try {
-    var blockDirs = await readdir(blocksRoot, { withFileTypes: true });
+    const blockDirs = await readdir(blocksRoot, { withFileTypes: true });
     await mkdir(buildImgDir, { recursive: true });
 
-    for (var d = 0; d < blockDirs.length; d++) {
-      var dirent = blockDirs[d];
+    for (let d = 0; d < blockDirs.length; d++) {
+      const dirent = blockDirs[d];
       if (!dirent.isDirectory()) continue;
 
-      var blockName = dirent.name;
-      var blockImgDir = path.join(blocksRoot, blockName, 'img');
+      const blockName = dirent.name;
+      const blockImgDir = path.join(blocksRoot, blockName, 'img');
 
       try {
-        var entries = await readdir(blockImgDir, { withFileTypes: true });
+        const entries = await readdir(blockImgDir, { withFileTypes: true });
 
-        for (var i = 0; i < entries.length; i++) {
-          var entry = entries[i];
+        for (let i = 0; i < entries.length; i++) {
+          const entry = entries[i];
           if (!entry.isFile()) continue;
 
           if (!isExtAllowed(entry.name, allowedExts)) {
@@ -134,8 +134,8 @@ async function copyBlockImagesFlat(allowedExts) {
             continue;
           }
 
-          var srcPath = path.join(blockImgDir, entry.name);
-          var destPath = path.join(buildImgDir, entry.name);
+          const srcPath = path.join(blockImgDir, entry.name);
+          const destPath = path.join(buildImgDir, entry.name);
 
           if (!(await isNewer(srcPath, destPath))) {
             continue;
@@ -172,25 +172,25 @@ async function copyBlockImagesFlat(allowedExts) {
 // с уникализацией имён. Фильтрует по allowedExts. Пропускает неизменённые.
 
 async function copyBlockVideosFlat(allowedExts) {
-  var blocksRoot = path.join(srcDir, 'blocks');
-  var buildVideoDir = path.join(buildDir, 'video');
+  const blocksRoot = path.join(srcDir, 'blocks');
+  const buildVideoDir = path.join(buildDir, 'video');
 
   try {
-    var blockDirs = await readdir(blocksRoot, { withFileTypes: true });
+    const blockDirs = await readdir(blocksRoot, { withFileTypes: true });
     await mkdir(buildVideoDir, { recursive: true });
 
-    for (var d = 0; d < blockDirs.length; d++) {
-      var dirent = blockDirs[d];
+    for (let d = 0; d < blockDirs.length; d++) {
+      const dirent = blockDirs[d];
       if (!dirent.isDirectory()) continue;
 
-      var blockName = dirent.name;
-      var blockVideoDir = path.join(blocksRoot, blockName, 'video');
+      const blockName = dirent.name;
+      const blockVideoDir = path.join(blocksRoot, blockName, 'video');
 
       try {
-        var entries = await readdir(blockVideoDir, { withFileTypes: true });
+        const entries = await readdir(blockVideoDir, { withFileTypes: true });
 
-        for (var i = 0; i < entries.length; i++) {
-          var entry = entries[i];
+        for (let i = 0; i < entries.length; i++) {
+          const entry = entries[i];
           if (!entry.isFile()) continue;
 
           if (!isExtAllowed(entry.name, allowedExts)) {
@@ -198,11 +198,11 @@ async function copyBlockVideosFlat(allowedExts) {
             continue;
           }
 
-          var srcPath = path.join(blockVideoDir, entry.name);
-          var uniqueDestPath = await getUniqueDestPath(buildVideoDir, entry.name);
+          const srcPath = path.join(blockVideoDir, entry.name);
+          const uniqueDestPath = await getUniqueDestPath(buildVideoDir, entry.name);
 
           // Для видео блоков isNewer проверяем по оригинальному имени
-          var directDest = path.join(buildVideoDir, entry.name);
+          const directDest = path.join(buildVideoDir, entry.name);
           if (!(await isNewer(srcPath, directDest))) {
             continue;
           }
@@ -239,23 +239,23 @@ export async function copyAssets() {
   logInfo('[assets] Копирование ассетов (без оптимизации)');
 
   // Читаем белые списки расширений из projectConfig
-  var filesList = await getFilesList();
-  var projectConfig = filesList.projectConfig;
-  var imgExts = Array.isArray(projectConfig.allowedImageExtensions)
+  const filesList = await getFilesList();
+  const projectConfig = filesList.projectConfig;
+  const imgExts = Array.isArray(projectConfig.allowedImageExtensions)
     ? projectConfig.allowedImageExtensions
     : null;
-  var videoExts = Array.isArray(projectConfig.allowedVideoExtensions)
+  const videoExts = Array.isArray(projectConfig.allowedVideoExtensions)
     ? projectConfig.allowedVideoExtensions
     : null;
 
-  var srcFonts = path.join(srcDir, 'fonts');
-  var destFonts = path.join(buildDir, 'fonts');
+  const srcFonts = path.join(srcDir, 'fonts');
+  const destFonts = path.join(buildDir, 'fonts');
 
-  var srcImg = path.join(srcDir, 'img');
-  var destImg = path.join(buildDir, 'img');
+  const srcImg = path.join(srcDir, 'img');
+  const destImg = path.join(buildDir, 'img');
 
-  var srcVideo = path.join(srcDir, 'video');
-  var destVideo = path.join(buildDir, 'video');
+  const srcVideo = path.join(srcDir, 'video');
+  const destVideo = path.join(buildDir, 'video');
 
   // Шрифты: src/fonts/** → build/fonts/** (без фильтра расширений)
   await copyDirRecursive(srcFonts, destFonts, 'шрифт', null);
@@ -276,7 +276,7 @@ export async function copyAssets() {
 }
 
 // Автозапуск при прямом запуске файла
-var isMainModule =
+const isMainModule =
   process.argv[1] &&
   path.resolve(process.argv[1]) === path.resolve(__filename);
 

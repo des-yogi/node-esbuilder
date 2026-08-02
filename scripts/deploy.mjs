@@ -57,7 +57,7 @@ function checkGitSetup() {
  */
 function checkBuildExists() {
   try {
-    var files = exec('git ls-files --others --cached ' + BUILD_DIR).trim();
+    const files = exec('git ls-files --others --cached ' + BUILD_DIR).trim();
     if (!files) {
       throw new Error('пусто');
     }
@@ -86,7 +86,7 @@ export async function deploy() {
 
   // 4. Создаём временный коммит с содержимым build/
   //    (нужен для git subtree split)
-  var commitMsg = 'deploy: ' + new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const commitMsg = 'deploy: ' + new Date().toISOString().slice(0, 19).replace('T', ' ');
   try {
     exec('git commit -m "' + commitMsg + '"');
   } catch (err) {
@@ -103,7 +103,7 @@ export async function deploy() {
   // 5. Выделяем build/ в отдельное дерево и пушим в docs
   logInfo('[deploy] Публикация в ветку "' + DEPLOY_BRANCH + '"...');
   try {
-    var splitHash = exec('git subtree split --prefix ' + BUILD_DIR + ' HEAD').trim();
+    const splitHash = exec('git subtree split --prefix ' + BUILD_DIR + ' HEAD').trim();
     exec('git push origin ' + splitHash + ':refs/heads/' + DEPLOY_BRANCH + ' --force');
   } catch (err) {
     // Откатываем временный коммит перед выбросом ошибки
@@ -123,13 +123,13 @@ export async function deploy() {
   logSuccess('[deploy] ✅ Опубликовано в ветку "' + DEPLOY_BRANCH + '"');
 
   // Подсказка
-  var remoteUrl = '';
+  let remoteUrl = '';
   try {
     remoteUrl = exec('git remote get-url origin').trim();
   } catch (e) { /* ignore */ }
 
   if (remoteUrl.indexOf('github.com') !== -1) {
-    var match = remoteUrl.match(/github\.com[:/](.+?)(?:\.git)?$/);
+    const match = remoteUrl.match(/github\.com[:/](.+?)(?:\.git)?$/);
     if (match) {
       logInfo('[deploy] GitHub Pages: https://'
         + match[1].split('/')[0] + '.github.io/'
@@ -141,7 +141,7 @@ export async function deploy() {
 }
 
 // --- Автозапуск при прямом вызове ---
-var isMainModule =
+const isMainModule =
   process.argv[1] &&
   path.resolve(process.argv[1]) === path.resolve(__filename);
 
