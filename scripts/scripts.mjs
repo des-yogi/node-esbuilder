@@ -26,7 +26,7 @@ export async function buildScripts({ mode = 'development' } = {}) {
   const { js } = await getFilesList();
   const { before, blocks, after, copied } = js;
 
-  // Фильтруем блоковые JS-файлы: включаем только существующие
+  // 1. Фильтруем блоковые JS-файлы: включаем только существующие
   const existingBlocks = (
     await Promise.all(
       blocks.map(async (filePath) => {

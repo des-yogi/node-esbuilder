@@ -75,6 +75,7 @@ export async function devServer() {
 
   // Защита от параллельных запусков
   let isRebuilding = false;
+  let pendingRebuild = false;
 
   const rebuildAllDev = async () => {
     await generateStyleEntry();
@@ -117,14 +118,21 @@ export async function devServer() {
   });
 
   watcher.on('all', async (event, filePath) => {
-    if (isRebuilding) return;
+    if (isRebuilding) {
+      // Сборка уже идёт — не теряем событие, а откладываем полную пересборку на потом
+      pendingRebuild = true;
+      return;
+    }
+    await runRebuildCycle(event, filePath);
+  });
+
+  async function runRebuildCycle(event, filePath) {
     isRebuilding = true;
 
     const rel = normPath(path.relative(srcDir, filePath));
     logInfo(`[dev-server] Изменение: ${event} ${rel}`);
 
     try {
-      // SVG-спрайт: пересобирать при add/change/unlink
       if (/^blocks\/sprite-svg\/svg\/[^/]+\.svg$/i.test(rel)) {
         await buildSvgSprite();
       } else if (rel.endsWith('.scss')) {
@@ -150,8 +158,18 @@ export async function devServer() {
       logError('[dev-server] Ошибка: ' + err.message);
     } finally {
       isRebuilding = false;
+
+      if (pendingRebuild) {
+        pendingRebuild = false;
+        logInfo('[dev-server] Во время сборки были пропущены изменения — пересобираем всё');
+        try {
+          await rebuildAllDev();
+        } catch (err) {
+          logError('[dev-server] Ошибка отложенной пересборки: ' + err.message);
+        }
+      }
     }
-  });
+  }
 }
 
 // --- Автозапуск при прямом запуске файла ---

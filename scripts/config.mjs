@@ -6,8 +6,7 @@ import { fileURLToPath } from 'node:url';
  * Этот модуль отвечает за:
  * - чтение projectConfig.json;
  * - подготовку списков файлов (css/js/img/video/blocksDirs),
- *   аналогично функции getFilesList из gulpfile.js проекта ugspot,
- *   но уже под новую архитектуру (Dart Sass v3, @use).
+ *   под новую архитектуру (Dart Sass v3, @use).
  *
  * На первом этапе реализуем только CSS-часть: список SCSS-файлов,
  * которые должны подключаться в style.scss.

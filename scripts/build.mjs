@@ -14,10 +14,10 @@ import { logInfo, logError } from './logger.mjs';
  * Последовательность:
  * 1) clean
  * 2) generateStyle
- * 3) sprite-svg
- * 4) styles
- * 5) scripts
- * 6) assets
+ * 3) styles
+ * 4) scripts
+ * 5) assets
+ * 6) sprite-svg — после assets, чтобы не перезаписать свежий спрайт
  * 7) html
  */
 
