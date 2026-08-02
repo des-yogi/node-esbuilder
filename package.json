@@ -25,7 +25,8 @@
     "lint": "npm run lint:js && npm run lint:css",
     "lint:fix": "npm run lint:js:fix && npm run lint:css:fix",
     "img:opt": "cross-env FORCE_COLOR=2 node scripts/img-opt.mjs",
-    "deploy": "cross-env NODE_ENV=production FORCE_COLOR=2 node scripts/deploy.mjs"
+    "deploy": "cross-env NODE_ENV=production FORCE_COLOR=2 node scripts/deploy.mjs",
+    "undeploy": "cross-env NODE_ENV=production FORCE_COLOR=2 node scripts/deploy.mjs --remove"
   },
   "browserslist": [
     "> 1%",
