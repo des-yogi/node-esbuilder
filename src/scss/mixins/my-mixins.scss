@@ -54,3 +54,47 @@
     }
   }
 }
+
+// Миксин принимает селектор элемента, который нужно изменить (по дефолту .faux-link)
+// Активируем поведение для .faux-link внутри любого блока-родителя
+// с передачей объекта изменения параметров  @include hover-trigger-for('.faux-link');
+// по-умолчания (параметры изменяются для дефолтной псевло-ссылки '.faux-link') - @include hover-trigger-for;
+// см. проект KECLab
+@mixin hover-trigger-for($target: '.faux-link') {
+  // & — это родительский блок, в котором вызван миксин
+
+  // Светлая тема: при ховере на <a> внутри родителя, меняем $target
+  @at-root &:has(a:hover) #{$target} {
+    background-color: var(--blue-100);
+  }
+
+  // Темная тема: то же самое, но в контексте темной темы на :root
+  @at-root :root[data-theme="dark"] &:has(a:hover) #{$target} {
+    background-color: var(--blue-600);
+  }
+
+  @at-root &:has(a:focus) #{$target} {
+    background-color: var(--blue-100);
+    border-color: var(--blue-700);
+    box-shadow: 0 0 0 4px rgba(#156dd1, 0.24);// rgba(21, 109, 209, 0.8)
+  }
+
+  @at-root :root[data-theme="dark"] &:has(a:focus) #{$target} {
+    background-color: var(--blue-600);
+    border-color: var(--blue-400);
+    box-shadow: 0 0 0 4px rgba(#156dd1, 0.24);
+  }
+
+  @at-root &:has(a:active) #{$target} {
+    background-color: var(--blue-300);
+    border-color: var(--blue-300);
+    box-shadow: none;
+  }
+
+  @at-root :root[data-theme="dark"] &:has(a:active) #{$target} {
+    background-color: var(--blue-800);
+    border-color: var(--blue-800);
+    color: var(--blue-300);
+    box-shadow: none;
+  }
+}

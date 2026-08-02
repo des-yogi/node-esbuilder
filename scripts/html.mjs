@@ -144,6 +144,8 @@ function applyVariables(content, context) {
 async function processHtmlFile(relPath, context = {}, stack = new Set()) {
   const normalized = relPath.replace(/\\/g, '/');
 
+  // Check against the ANCESTOR chain passed in from the caller.
+  // This must never be the same Set instance used by sibling branches.
   if (stack.has(normalized)) {
     throw new Error(
       `[html] Обнаружен циклический include: ${Array.from(stack).join(
@@ -152,7 +154,11 @@ async function processHtmlFile(relPath, context = {}, stack = new Set()) {
     );
   }
 
-  stack.add(normalized);
+  // IMPORTANT: create a fresh copy for this branch. Never mutate the
+  // caller's `stack` — sibling includes (processed in parallel via
+  // Promise.all in expandIncludes) must not see each other's ancestry.
+  const branchStack = new Set(stack);
+  branchStack.add(normalized);
 
   const absPath = path.join(srcDir, normalized);
   let content;
@@ -167,22 +173,20 @@ async function processHtmlFile(relPath, context = {}, stack = new Set()) {
     );
   }
 
-  // Сначала удаляем DEV-комментарии, чтобы не обрабатывать @@include внутри них
   const withoutDev = content.replace(DEV_COMMENT_RE, '');
 
   const withIncludes = await expandIncludes(
     withoutDev,
     path.dirname(normalized),
     context,
-    stack,
+    branchStack,
   );
 
-  // NEW: обработка @@if/@@else/@@endif (между инклудами и переменными)
   const withConditions = applyConditionals(withIncludes, context);
-
   const withVars = applyVariables(withConditions, context);
 
-  stack.delete(normalized);
+  // No stack.delete() here anymore — branchStack was a local copy,
+  // it simply goes out of scope, nothing to clean up.
   return withVars;
 }
 

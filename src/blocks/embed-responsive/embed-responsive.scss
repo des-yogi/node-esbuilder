@@ -54,6 +54,14 @@
     }
   }
 
+  &--2-3 { // модификатор на случай вставки 2/3
+
+    &::before {
+      // padding-top: percentage(3 / 2);
+      padding-top: math.percentage(math.div(3, 2));
+    }
+  }
+
   &--1-1 { // модификатор на случай вставки 1/1
 
     &::before {

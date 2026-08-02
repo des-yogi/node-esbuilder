@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html class="no-js page no-transition" lang="xyz" prefix="og: https://ogp.me/ns#" data-theme>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>Home page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="format-detection" content="date=no" />
-    <meta name="format-detection" content="address=no" />
-    <meta name="format-detection" content="email=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="email=no">
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="robots" content="index,follow" />
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="robots" content="index,follow">
+
+    <!-- <meta name="theme-color" content="#0b1020">
+  Изменяет цвет элементов интерфейса браузера и операционной системы в соответствии с фирменным стилем вашей компании. Используйте атрибут media, чтобы задать один цвет для светлого режима и другой — для темного.
+-->
+    <!-- <meta name="color-scheme" content="light"> -->
+    <!-- <meta name="color-scheme" content="dark"> -->
+    <!-- <meta name="color-scheme" content="light dark"> -->
+
     <!-- OpenGraph microdata
 <meta property="og:url"      content="https://www.your-domain.com/your-page.html">
 <meta property="og:type"          content="website">
@@ -26,7 +34,21 @@
 <link rel="preload" href="assets/fonts/roboto-v18-cyrillic_latin-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/noto-sans-v7-cyrillic_latin-regular.woff2" as="font" type="font/woff2" crossorigin> -->
 
-    <link href="css/style.min.css" rel="stylesheet" media="screen" />
+    <!-- Подключить на наужных страницах -->
+    <!-- <link rel="preload" href="css/swiper-bundle.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="css/swiper-bundle.min.css" rel="stylesheet" media="screen"></noscript>
+<link rel="preload" href="css/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="css/fancybox.css" rel="stylesheet" media="screen"></noscript> -->
+    <!-- Основной бандл стилей -->
+    <link
+      rel="preload"
+      href="css/style.min.css"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      ">
+    <noscript><link rel="stylesheet" href="css/style.min.css"></noscript>
   </head>
 
   <body>

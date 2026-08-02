@@ -8,7 +8,13 @@
 //  Подключение и конфигурация скриптов CoreUI в версии Bootstrap
 //  Конфигурация стилей производится в отдельном файле src/scss/_coreui-custom.scss
 // =============================================================================
-// import "@popperjs/core"; // CoreUI 5.6.1 требует Popper.js для некоторых компонентов (dropdown, tooltip, popover), но только в случае программного управления ими (требуется проверка). Если используются только декларативные атрибуты, можно не подключать и не беспокоиться о Popper.js, модули сами подтянут нужные им зависимости.
+// При сборке бандла esbuild сборщик сам находит и подключает @popperjs/core",
+// поэтому его не надо импортировать вручную!
+// Если подключение через внешний скрипт <script src="js/popper.min.js"></script>
+// надо вручную импортировать как указано ниже.
+//import * as Popper from '@popperjs/core';
+//window.Popper = Popper; // Делаем Popper доступным для CoreUI
+//import "@popperjs/core"; // CoreUI 5.6.1 требует Popper.js для некоторых компонентов (dropdown, tooltip, popover), но только в случае программного управления ими (требуется проверка). Если используются только декларативные атрибуты, можно не подключать и не беспокоиться о Popper.js, модули сами подтянут нужные им зависимости.
 
 // import '@coreui/coreui/js/src/dropdown.js';
 // import '@coreui/coreui/js/src/modal.js';
@@ -283,6 +289,46 @@ function initGlobal() {
 }
 
 initGlobal();
+
+
+// =============================================================================
+//  Fancybox UI
+// =============================================================================
+//import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
+//Fancybox.bind("[data-fancybox]", {
+  // Your custom options
+//});
+
+// =============================================================================
+//  Swiper.js
+// =============================================================================
+//import Swiper from 'swiper';
+//import { Navigation, Pagination, Scrollbar } from 'swiper/modules'; // Подсключение помодульно
+// Подключение бандла Swiper со ВСЕМИ модулями
+// import Swiper from 'swiper/bundle';
+
+// init Swiper:
+// const swiperTest = new Swiper('.swiper', {
+//   modules: [Navigation, Pagination, Scrollbar],
+//   // Optional parameters
+//   spaceBetween: 20,
+//   slidesPerView: 1,
+//   loop: true,
+
+//   // If we need pagination
+//   pagination: {
+//     el: '.swiper-pagination',
+//   },
+//   // Navigation arrows
+//   navigation: {
+//     nextEl: '.swiper-button-next',
+//     prevEl: '.swiper-button-prev',
+//   },
+//   // And if we need scrollbar
+//   scrollbar: {
+//     el: '.swiper-scrollbar',
+//   },
+// });
 
 
 // =============================================================================

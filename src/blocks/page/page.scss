@@ -3,6 +3,10 @@
 @use "sass:math";
 @use "sass:color";
 
+:root {
+  color-scheme: light dark; // может быть только 1 значение или оба!
+}
+
 // Make viewport great again (responsive)
 // http://timkadlec.com/2012/10/ie10-snap-mode-and-responsive-design/
 @at-root {
@@ -45,45 +49,43 @@
     flex-shrink: 0;
   }
 
-  * {
-    // Firefox only
+  // ScrollBar -> Firefox only
 
-    /* «цвет ползунка» «цвет полосы скроллбара» */
-    scrollbar-color: $main-color $gray-lightest;
+  /* «цвет ползунка» «цвет полосы скроллбара» */
+  scrollbar-color: $main-color $gray-lightest;
 
-    // color1 (wdtn ползунка) color2 (цвет всего скролбара)
-    scrollbar-width: thin;  /* толщина */
+  // color1 (wdtn ползунка) color2 (цвет всего скролбара)
+  scrollbar-width: thin;  /* толщина */
 
-    // for webkit browsers (Chrome, Opera, Safary, Edge ets.)
-    // Here is a complete list of all the new pseudo-elements. All of these pseudo-elements must be prefixed with -webkit-:
-    // scrollbar
-    // scrollbar-button
-    // scrollbar-track
-    // scrollbar-track-piece
-    // scrollbar-thumb
-    // scrollbar-corner
-    // resize
+  // for webkit browsers (Chrome, Opera, Safary, Edge ets.)
+  // Here is a complete list of all the new pseudo-elements. All of these pseudo-elements must be prefixed with -webkit-:
+  // scrollbar
+  // scrollbar-button
+  // scrollbar-track
+  // scrollbar-track-piece
+  // scrollbar-thumb
+  // scrollbar-corner
+  // resize
 
-    /* полоса прокрутки (скроллбар) */
-    ::-webkit-scrollbar {
-      width: 6px; /* ширина для вертикального скролла */
-      height: 6px; /* высота для горизонтального скролла */
-      background-color: $gray-lightest;
-    }
+  /* полоса прокрутки (скроллбар) */
+  ::-webkit-scrollbar {
+    width: 6px; /* ширина для вертикального скролла */
+    height: 6px; /* высота для горизонтального скролла */
+    background-color: $gray-lightest;
+  }
 
-    /* ползунок скроллбара */
-    ::-webkit-scrollbar-thumb {
-      background-color: $main-color;
-      border-radius: 8px;
-      box-shadow: none;
+  /* ползунок скроллбара */
+  ::-webkit-scrollbar-thumb {
+    background-color: $main-color;
+    border-radius: 8px;
+    box-shadow: none;
 
-      // box-shadow: inset 1px 1px 10px #f3faf7;
-    }
+    // box-shadow: inset 1px 1px 10px #f3faf7;
+  }
 
-    ::-webkit-scrollbar-thumb:hover {
-      // background-color: darken($main-color, 5%);
-      background-color: color.scale($main-color, $lightness: 5%);
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    // background-color: darken($main-color, 5%);
+    background-color: color.scale($main-color, $lightness: 5%);
   }
 
   // Theme toggler classes - Start
@@ -272,15 +274,20 @@ a {
   padding-left: 0;
   list-style: none;
 
-  li::before {
-    display: none;
-  }
+  // li::before {
+  //   display: none;
+  // }
 }
 
 /* Кастомизируем выделение текста на сайте */
 *:not(img)::selection {
   color: $white;
   background-color: $main-color; /* Safari, Chrome, Opera */
+
+  // :root[data-theme="dark"] & {
+  //   color: var(--yellow-400);
+  //   background-color: var(--blue-800);
+  // }
 }
 
 /*
@@ -337,9 +344,7 @@ a {
   @include col(xxl, 1, $grid-columns, 26px); // XXL (1800 по умолчанию) — 1 из 12, промежутки 26px
 } */
 
-
-// background: svg-load('../blocks/phones-modal/bg-img/phone.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
-
+// Отключение видимости полосы прокрутки, при сохранении функционала
 .invisible-scrollbar {
   scrollbar-width: none;
 
@@ -348,9 +353,41 @@ a {
   }
 }
 
+// Swiper
+// .swiper-wrapper,
+// .swiper-slide {
+//   box-sizing: border-box;
+// }
+
+// .swiper-slide {
+//   height: auto;
+// }
+
+// .swiper-button-prev,
+// .swiper-button-next {}
+
+// .swiper-button-disabled {}
+
+// .swiper-slide-active {}
+
 .test-col {
   @include col(xs, 12);
   @include col(sm, 6);
   @include col(md, 4);
   @include col(lg, 3);
 }
+
+// background-image: svg-load('../blocks/phones-modal/bg-img/phone.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+// background-image: svg-load('../blocks/sprite-svg/svg/asterisk.svg', fill=$main-color, stroke=rgba(255, 255, 255, 0));
+
+/*
+@include col(xs, 12);
+@include col(md, 6);
+@include col(xl, 3);
+@include col(xxl, 3);
+*/
+
+// :root[data-theme="dark"] & {}
+
+// @media (min-width: $screen-md) {}
+// @media (max-width: $screen-md - 1) {}

@@ -1,4 +1,5 @@
 @use '../../scss/variables.scss' as *;
+@use '../../scss/mixins.scss' as *;
 
 $gray-lightest: hsl(0deg 0% 90%) !default;
 $text-color-muted: hsl(0deg 0% 50%) !default;
@@ -8,12 +9,17 @@ $line-height: 1.375em !default;
 $field-padding-vertical: 0.3em !default;
 $field-padding-horizontal: 0.7em !default;
 
+table,
 .table {
   $block-name: &; // #{$block-name}__element
 
-  table-layout: fixed;
+  // table-layout: fixed;
   border-collapse: collapse;
   width: 100%;
+
+  /* Включает одинаковую ширину цифр И перечеркнутый ноль */
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-feature-settings: "tnum", "zero"; /* Резерв для старых браузеров */
   border: 1px solid $border-color;
   margin: $line-height 0;
 

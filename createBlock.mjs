@@ -68,7 +68,8 @@ if (blockName) {
         `// @use 'sass:map' as *;     // map.get(), map.set(), map.merge(), map.keys(), map.values(), map.has-key(), map.remove()\n` +
         `// @use 'sass:color' as *;   // color.adjust(), color.scale(), color.mix(), color.change(), color.complement(), color.invert()\n` +
         `// @use 'sass:string' as *;  // string.index(), string.slice(), string.to-upper-case(), string.to-lower-case(), string.length(), string.insert()\n\n` +
-        `@use '../../scss/variables' as *;\n\n` +
+        `@use '../../scss/variables' as *;\n` +
+        `@use '../../scss/mixins' as *;\n\n` +
         `.${blockName} {\n  $block-name: &; // #{$block-name}__element\n\n}\n`;
 
       // Добавляем блок в projectConfig, если его ещё нет

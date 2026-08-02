@@ -1,12 +1,13 @@
 <!--DEV
-@ @include('blocks/pagination/pagination.html')
+@@include('blocks/pagination/pagination.html')
 -->
 
 <div class="pagination" aria-label="Постраничная навигация" role="navigation">
   <ol class="pagination__list" >
 
     <li class="pagination__item  pagination__item--prev">
-      <a class="pagination__link  pagination__link--disabled" aria-label="Предыдущая страница">
+<!-- aria-label="Предыдущая страница" можно применять только на ссылках с атриб. href="" -->
+      <a class="pagination__link  pagination__link--disabled">
       </a>
     </li>
 
