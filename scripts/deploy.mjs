@@ -64,6 +64,22 @@ function getCurrentBranch() {
 }
 
 /**
+ * Форматирует текущее локальное время системы как "YYYY-MM-DD HH:mm:ss".
+ * В отличие от toISOString(), не конвертирует в UTC.
+ */
+function formatLocalTimestamp() {
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, '0');
+
+  return now.getFullYear()
+    + '-' + pad(now.getMonth() + 1)
+    + '-' + pad(now.getDate())
+    + ' ' + pad(now.getHours())
+    + ':' + pad(now.getMinutes())
+    + ':' + pad(now.getSeconds());
+}
+
+/**
  * Копирует build/ → docs/, предварительно очищая старое содержимое docs/,
  * чтобы там не оставались файлы от предыдущих сборок.
  */
@@ -110,7 +126,8 @@ export async function deploy() {
     exec('git add --force ' + DOCS_DIR);
 
     // 6. Коммитим изменения в master
-    const commitMsg = 'deploy: ' + new Date().toISOString().slice(0, 19).replace('T', ' ');
+    // const commitMsg = 'deploy: ' + new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const commitMsg = 'deploy: ' + formatLocalTimestamp();
     try {
       exec('git commit -m "' + commitMsg + '"');
     } catch (err) {
@@ -197,8 +214,9 @@ export async function undeploy() {
     // На случай, если docs/ была в .gitignore и git rm её не затронула
     await rm(path.join(rootDir, DOCS_DIR), { recursive: true, force: true });
 
-    const commitMsg = 'undeploy: remove ' + DOCS_DIR + ' '
-      + new Date().toISOString().slice(0, 19).replace('T', ' ');
+    // const commitMsg = 'undeploy: remove ' + DOCS_DIR + ' '
+    //   + new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const commitMsg = 'undeploy: remove ' + DOCS_DIR + ' ' + formatLocalTimestamp();
     try {
       exec('git commit -m "' + commitMsg + '"');
     } catch (err) {

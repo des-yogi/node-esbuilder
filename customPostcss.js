@@ -1,14 +1,7 @@
-// import postcssPxtorem from 'postcss-pxtorem';
-// import postcssColorFunction from 'postcss-color-function';
-// import postcssCalc from 'postcss-calc';
-// import postcssExtractMediaQuery from 'postcss-extract-media-query';
-
-// Заготовки на будущее (уже установлены в devDependencies, подключайте по мере надобности):
-// import postcssCalc from 'postcss-calc';
-// import postcssPxtorem from 'postcss-pxtorem';
-// import postcssExtractMediaQuery from 'postcss-extract-media-query';
-
-export default [];
+import postcssPxtorem from 'postcss-pxtorem';
+//import postcssColorFunction from 'postcss-color-function';
+import postcssCalc from 'postcss-calc';
+import postcssExtractMediaQuery from 'postcss-extract-media-query';
 
 const config = {
   calc: true,
@@ -45,4 +38,4 @@ if (config.pxtorem) {
 //   plugins.push(postcssColorFunction());
 // }
 
-//export default plugins;
+export default plugins;
