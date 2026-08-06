@@ -1,4 +1,4 @@
-🇺🇦 Русский | [🇬🇧 English](./README.md)
+🇺🇦 Русский | [🇬🇧 English](./README.en.md)
 
 # node-esbuilder
 
