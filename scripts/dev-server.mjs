@@ -31,6 +31,7 @@ const projectConfigPath = path.join(rootDir, 'projectConfig.json');
 // дожидаясь, пока файл перестанет меняться, прежде чем эмитить событие.
 const watchOptions = {
   ignoreInitial: true,
+  ignored: '**/scss/style.scss',
   awaitWriteFinish: {
     stabilityThreshold: 200,
     pollInterval: 50,
