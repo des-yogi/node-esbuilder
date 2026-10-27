@@ -250,7 +250,6 @@
 body {
   font-family: "Roboto", "Ubuntu", "Droid Sans", "Helvetica Neue", "Arial", sans-serif;
   font-size: 16px;
-  font-size-adjust: from-font;
   line-height: 1.5;
   overflow-wrap: break-word;
   text-align: left;
@@ -1251,7 +1250,7 @@ input:checked ~ .field-radio__name-text::after {
 }
 textarea.field-text__input {
   height: auto;
-  min-height: 15px;
+  min-height: calc(15px);
   resize: vertical;
 }
 

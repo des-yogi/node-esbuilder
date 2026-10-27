@@ -16,7 +16,7 @@ A replacement for the outdated Gulp stack. No React, Vue, or other frameworks �
 | PostCSS            | ^8.5.6  | Autoprefixer, media-query sorting, inline SVG      |
 | esbuild            | ^0.28.1 | Bundles JS into a single file (IIFE), minification |
 | browser-sync       | ^3.0.4  | Dev server with live-reload                        |
-| chokidar           | ^5.0.0  | File-change watching                               |
+| chokidar           | ^6.0.0  | File-change watching                               |
 | sharp              | ^0.35.3 | Image optimization and conversion (WebP, AVIF)     |
 
 ## Quick Start
@@ -367,6 +367,8 @@ The nested folder structure is preserved.
 
 The `npm run deploy` command publishes the contents of `build/` to the `docs/` folder on the `master` branch. No third-party packages are needed — it relies on git only.
 
+> **Warning:** Never run `npm run deploy` while `npm run dev` is active in another terminal. `deploy.mjs` switches git branches twice (`git checkout master`, then back) — each checkout physically rewrites files on disk, which the dev server's file watcher (`chokidar.watch(srcDir)`) picks up as a burst of unrelated changes and reacts to with cascading rebuilds. Stop the dev server first (`Ctrl+C`), then run the deploy.
+
 **What happens:**
 
 1. Production build (`npm run build`) — on the current working branch
@@ -535,5 +537,5 @@ export default [];
 
 ## Requirements
 
-- Node.js ≥ 20+ (22+ recommended)
+- Node.js ≥ 22.23.4+
 - npm ≥ 9
